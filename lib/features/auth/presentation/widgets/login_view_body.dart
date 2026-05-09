@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/auth/presentation/cubits/login/login_cubit.dart';
 import 'package:test_codex/features/auth/presentation/views/register_view.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_background.dart';
+import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_card.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_decoration_graphics.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_footer.dart';
@@ -23,7 +23,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthBackground(
+    return AppBackground(
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 64),

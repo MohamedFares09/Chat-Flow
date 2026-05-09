@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 
-class AuthBackground extends StatelessWidget {
-  const AuthBackground({
+class AppBackground extends StatelessWidget {
+  const AppBackground({
     required this.child,
     this.useRegisterColor = false,
     super.key,

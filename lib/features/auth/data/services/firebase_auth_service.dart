@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_codex/core/errors/custom_exception.dart';
 
 class FirebaseAuthService {
-  FirebaseAuthService(this.firebaseAuth);
+  FirebaseAuthService({
+    required this.firebaseAuth,
+    required this.firestore,
+  });
 
   final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
   Future<User> signInWithEmailAndPassword({
     required String email,
@@ -15,6 +20,7 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
+      await _saveUserDataIfNeeded(credential.user!);
       return credential.user!;
     } on FirebaseAuthException catch (e) {
       throw CustomException(_firebaseAuthMessage(e));
@@ -35,7 +41,9 @@ class FirebaseAuthService {
       );
       await credential.user!.updateDisplayName(name);
       await credential.user!.reload();
-      return firebaseAuth.currentUser ?? credential.user!;
+      final user = firebaseAuth.currentUser ?? credential.user!;
+      await _saveUserDataIfNeeded(user, name: name);
+      return user;
     } on FirebaseAuthException catch (e) {
       throw CustomException(_firebaseAuthMessage(e));
     } catch (_) {
@@ -62,5 +70,19 @@ class FirebaseAuthService {
       default:
         return exception.message ?? 'Authentication failed. Please try again.';
     }
+  }
+
+  Future<void> _saveUserDataIfNeeded(User user, {String? name}) async {
+    final userName = name?.trim().isNotEmpty == true
+        ? name!.trim()
+        : user.displayName?.trim().isNotEmpty == true
+            ? user.displayName!.trim()
+            : user.email?.split('@').first ?? 'User';
+    await firestore.collection('users').doc(user.uid).set({
+      'uId': user.uid,
+      'name': userName,
+      'email': user.email?.toLowerCase() ?? '',
+      'photoUrl': user.photoURL,
+    }, SetOptions(merge: true));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/auth/presentation/cubits/register/register_cubit.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_background.dart';
+import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_card.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_footer.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_header.dart';
@@ -25,7 +25,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return AuthBackground(
+    return AppBackground(
       useRegisterColor: true,
       child: SafeArea(
         child: Column(

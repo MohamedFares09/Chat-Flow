@@ -1,20 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_codex/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:test_codex/features/auth/data/services/firebase_auth_service.dart';
 import 'package:test_codex/features/auth/domain/repos/auth_repo.dart';
+import 'package:test_codex/features/home/data/repos/home_repo_impl.dart';
+import 'package:test_codex/features/home/data/services/home_firestore_service.dart';
+import 'package:test_codex/features/home/domain/repos/home_repo.dart';
 
 final GetIt getIt = GetIt.instance;
 
 void setupGetIt() {
-  if (getIt.isRegistered<AuthRepo>()) {
-    return;
+  if (!getIt.isRegistered<FirebaseAuth>()) {
+    getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   }
-
-  getIt.registerLazySingleton<FirebaseAuthService>(
-    () => FirebaseAuthService(FirebaseAuth.instance),
-  );
-  getIt.registerLazySingleton<AuthRepo>(
-    () => AuthRepoImpl(authService: getIt<FirebaseAuthService>()),
-  );
+  if (!getIt.isRegistered<FirebaseFirestore>()) {
+    getIt.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance,
+    );
+  }
+  if (!getIt.isRegistered<FirebaseAuthService>()) {
+    getIt.registerLazySingleton<FirebaseAuthService>(
+      () => FirebaseAuthService(
+        firebaseAuth: getIt<FirebaseAuth>(),
+        firestore: getIt<FirebaseFirestore>(),
+      ),
+    );
+  }
+  if (!getIt.isRegistered<AuthRepo>()) {
+    getIt.registerLazySingleton<AuthRepo>(
+      () => AuthRepoImpl(authService: getIt<FirebaseAuthService>()),
+    );
+  }
+  if (!getIt.isRegistered<HomeFirestoreService>()) {
+    getIt.registerLazySingleton<HomeFirestoreService>(
+      () => HomeFirestoreService(
+        firestore: getIt<FirebaseFirestore>(),
+        firebaseAuth: getIt<FirebaseAuth>(),
+      ),
+    );
+  }
+  if (!getIt.isRegistered<HomeRepo>()) {
+    getIt.registerLazySingleton<HomeRepo>(
+      () => HomeRepoImpl(homeFirestoreService: getIt<HomeFirestoreService>()),
+    );
+  }
 }

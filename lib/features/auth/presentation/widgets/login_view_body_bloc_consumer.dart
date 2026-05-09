@@ -4,6 +4,7 @@ import 'package:test_codex/features/auth/presentation/cubits/login/login_cubit.d
 import 'package:test_codex/core/widgets/custom_progress_hud.dart';
 import 'package:test_codex/core/widgets/build_snack_bar.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_view_body.dart';
+import 'package:test_codex/features/home/presentation/views/home_view.dart';
 
 class LoginViewBodyBlocConsumer extends StatelessWidget {
   const LoginViewBodyBlocConsumer({super.key});
@@ -24,6 +25,7 @@ class LoginViewBodyBlocConsumer extends StatelessWidget {
             message: 'Signed in successfully.',
             color: Colors.green,
           );
+          Navigator.pushReplacementNamed(context, HomeView.route);
         }
       },
       builder: (context, state) {
