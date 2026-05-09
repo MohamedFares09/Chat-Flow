@@ -7,6 +7,9 @@ import 'package:test_codex/features/auth/domain/repos/auth_repo.dart';
 import 'package:test_codex/features/home/data/repos/home_repo_impl.dart';
 import 'package:test_codex/features/home/data/services/home_firestore_service.dart';
 import 'package:test_codex/features/home/domain/repos/home_repo.dart';
+import 'package:test_codex/features/settings/data/repos/settings_repo_impl.dart';
+import 'package:test_codex/features/settings/data/services/settings_firebase_service.dart';
+import 'package:test_codex/features/settings/domain/repos/settings_repo.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -43,6 +46,21 @@ void setupGetIt() {
   if (!getIt.isRegistered<HomeRepo>()) {
     getIt.registerLazySingleton<HomeRepo>(
       () => HomeRepoImpl(homeFirestoreService: getIt<HomeFirestoreService>()),
+    );
+  }
+  if (!getIt.isRegistered<SettingsFirebaseService>()) {
+    getIt.registerLazySingleton<SettingsFirebaseService>(
+      () => SettingsFirebaseService(
+        firebaseAuth: getIt<FirebaseAuth>(),
+        firestore: getIt<FirebaseFirestore>(),
+      ),
+    );
+  }
+  if (!getIt.isRegistered<SettingsRepo>()) {
+    getIt.registerLazySingleton<SettingsRepo>(
+      () => SettingsRepoImpl(
+        settingsFirebaseService: getIt<SettingsFirebaseService>(),
+      ),
     );
   }
 }

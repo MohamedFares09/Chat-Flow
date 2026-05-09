@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/views/login_view.dart';
-import 'package:test_codex/core/widgets/custom_asset_image.dart';
-import 'package:test_codex/core/utils/app_images.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/core/utils/app_images.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/features/auth/presentation/views/login_view.dart';
+import 'package:test_codex/features/home/presentation/views/home_view.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -17,7 +19,10 @@ class _SplashViewBodyState extends State<SplashViewBody> {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, LoginView.route);
+      final route = FirebaseAuth.instance.currentUser == null
+          ? LoginView.route
+          : HomeView.route;
+      Navigator.pushReplacementNamed(context, route);
     });
   }
 

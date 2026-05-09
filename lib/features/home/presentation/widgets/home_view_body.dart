@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/core/utils/route_names.dart';
 import 'package:test_codex/core/widgets/app_background.dart';
+import 'package:test_codex/core/widgets/app_bottom_nav_bar.dart';
 import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/home/domain/entities/home_user_entity.dart';
 import 'package:test_codex/features/home/presentation/cubits/home/home_cubit.dart';
-import 'package:test_codex/features/home/presentation/widgets/home_bottom_nav_bar.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_chat_list.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_fab.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_header.dart';
@@ -81,7 +82,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               ],
             ),
             const HomeFab(),
-            const HomeBottomNavBar(),
+            AppBottomNavBar(
+              selectedIndex: 0,
+              onItemSelected: (index) {
+                if (index == 3) {
+                  Navigator.pushReplacementNamed(context, RouteNames.settings);
+                }
+              },
+            ),
           ],
         ),
       ),
