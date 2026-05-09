@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_text_form_field.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/core/widgets/custom_text_form_field.dart';
 
 class RegisterLabeledField extends StatelessWidget {
   const RegisterLabeledField({
@@ -32,7 +32,7 @@ class RegisterLabeledField extends StatelessWidget {
           child: Text(
             label,
             style: const TextStyle(
-              color: AuthColors.accent,
+              color: AppColors.accent,
               fontSize: 12,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.6,
@@ -41,14 +41,14 @@ class RegisterLabeledField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        AuthTextFormField(
+        CustomTextFormField(
           hintText: hintText,
           onSaved: onSaved,
           validator: validator,
           keyboardType: keyboardType,
           prefixAsset: prefixAsset,
           obscureText: obscureText,
-          fillColor: AuthColors.registerInput,
+          fillColor: AppColors.registerInput,
           borderRadius: 16,
           hasBorder: true,
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_asset_image.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_assets.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/core/utils/app_images.dart';
 
 class RegisterFooterGraphics extends StatelessWidget {
   const RegisterFooterGraphics({super.key});
@@ -12,11 +12,11 @@ class RegisterFooterGraphics extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AuthAssetImage(AuthAssets.footerCloud, width: 59, height: 43),
+          CustomAssetImage(AppImages.footerCloud, width: 59, height: 43),
           SizedBox(width: 24),
-          AuthAssetImage(AuthAssets.footerRocket, width: 40, height: 40),
+          CustomAssetImage(AppImages.footerRocket, width: 40, height: 40),
           SizedBox(width: 24),
-          AuthAssetImage(AuthAssets.footerStars, width: 59, height: 59),
+          CustomAssetImage(AppImages.footerStars, width: 59, height: 59),
         ],
       ),
     );

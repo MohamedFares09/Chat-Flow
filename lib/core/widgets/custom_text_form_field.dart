@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_asset_image.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/core/utils/validators.dart';
 
-class AuthTextFormField extends StatefulWidget {
-  const AuthTextFormField({
+class CustomTextFormField extends StatefulWidget {
+  const CustomTextFormField({
     required this.hintText,
     required this.onSaved,
     this.validator,
     this.keyboardType,
     this.prefixAsset,
     this.obscureText = false,
-    this.fillColor = AuthColors.input,
+    this.fillColor = AppColors.input,
     this.borderRadius = 12,
     this.hasBorder = false,
     super.key,
@@ -27,10 +28,10 @@ class AuthTextFormField extends StatefulWidget {
   final bool hasBorder;
 
   @override
-  State<AuthTextFormField> createState() => _AuthTextFormFieldState();
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
 
-class _AuthTextFormFieldState extends State<AuthTextFormField> {
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late bool obscureText = widget.obscureText;
 
   @override
@@ -38,7 +39,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadius),
       borderSide: widget.hasBorder
-          ? const BorderSide(color: AuthColors.mutedBorder)
+          ? const BorderSide(color: AppColors.mutedBorder)
           : BorderSide.none,
     );
 
@@ -46,12 +47,12 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
       height: 56,
       child: TextFormField(
         onSaved: widget.onSaved,
-        validator: widget.validator ?? _requiredValidator,
+        validator: widget.validator ?? Validators.requiredField,
         keyboardType: widget.keyboardType,
         obscureText: obscureText,
-        cursorColor: AuthColors.accent,
+        cursorColor: AppColors.accent,
         style: const TextStyle(
-          color: AuthColors.title,
+          color: AppColors.title,
           fontSize: 16,
           height: 1.5,
         ),
@@ -60,7 +61,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
           fillColor: widget.fillColor,
           hintText: widget.hintText,
           hintStyle: const TextStyle(
-            color: AuthColors.body,
+            color: AppColors.body,
             fontSize: 16,
             height: 1.5,
           ),
@@ -69,7 +70,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
               ? null
               : Padding(
                   padding: const EdgeInsets.only(left: 17, right: 8),
-                  child: AuthAssetImage(
+                  child: CustomAssetImage(
                     widget.prefixAsset!,
                     width: 18,
                     height: 18,
@@ -88,7 +89,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
                     obscureText
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: AuthColors.body,
+                    color: AppColors.body,
                     size: 22,
                   ),
                 )
@@ -96,7 +97,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
           border: border,
           enabledBorder: border,
           focusedBorder: border.copyWith(
-            borderSide: const BorderSide(color: AuthColors.accent),
+            borderSide: const BorderSide(color: AppColors.accent),
           ),
           errorBorder: border.copyWith(
             borderSide: const BorderSide(color: Colors.redAccent),
@@ -107,12 +108,5 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
         ),
       ),
     );
-  }
-
-  String? _requiredValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'This field is required.';
-    }
-    return null;
   }
 }

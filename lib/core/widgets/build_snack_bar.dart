@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showAuthSnackBar(
+void buildSnackBar(
   BuildContext context, {
   required String message,
   required Color color,

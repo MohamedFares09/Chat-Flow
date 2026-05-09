@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class LoginFooter extends StatelessWidget {
   const LoginFooter({required this.onRegisterTap, super.key});
@@ -14,7 +14,7 @@ class LoginFooter extends StatelessWidget {
         const Text(
           "Don't have an account? ",
           style: TextStyle(
-            color: AuthColors.body,
+            color: AppColors.body,
             fontSize: 16,
             height: 1.5,
           ),
@@ -24,7 +24,7 @@ class LoginFooter extends StatelessWidget {
           child: const Text(
             'Register',
             style: TextStyle(
-              color: AuthColors.accent,
+              color: AppColors.accent,
               fontSize: 16,
               fontWeight: FontWeight.w700,
               height: 1.5,

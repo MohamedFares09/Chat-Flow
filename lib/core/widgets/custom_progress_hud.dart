@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AuthProgressHud extends StatelessWidget {
-  const AuthProgressHud({
+class CustomProgressHud extends StatelessWidget {
+  const CustomProgressHud({
     required this.isLoading,
     required this.child,
     super.key,

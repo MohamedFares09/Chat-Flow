@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class RegisterHeader extends StatelessWidget {
   const RegisterHeader({super.key});
@@ -12,7 +12,7 @@ class RegisterHeader extends StatelessWidget {
         Text(
           'Join the Flow',
           style: TextStyle(
-            color: AuthColors.accent,
+            color: AppColors.accent,
             fontSize: 32,
             fontWeight: FontWeight.w700,
             height: 1.25,
@@ -22,7 +22,7 @@ class RegisterHeader extends StatelessWidget {
         Text(
           'Create your account to start seamless\nconversations with your world.',
           style: TextStyle(
-            color: AuthColors.body,
+            color: AppColors.body,
             fontSize: 16,
             height: 1.5,
           ),

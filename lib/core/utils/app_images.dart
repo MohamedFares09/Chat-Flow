@@ -1,4 +1,4 @@
-class AuthAssets {
+class AppImages {
   static const String splashLogo = 'assets/images/auth/splash_logo.svg';
   static const String google = 'assets/images/auth/google.jpg';
   static const String securityLock = 'assets/images/auth/security_lock.svg';

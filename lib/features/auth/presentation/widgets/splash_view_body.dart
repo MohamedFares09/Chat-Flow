@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/features/auth/presentation/views/login_view.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_asset_image.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_assets.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/core/utils/app_images.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -28,7 +28,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AuthColors.primary, AuthColors.purple],
+          colors: [AppColors.primary, AppColors.purple],
         ),
       ),
       child: Stack(
@@ -37,8 +37,8 @@ class _SplashViewBodyState extends State<SplashViewBody> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const AuthAssetImage(
-                  AuthAssets.splashLogo,
+                const CustomAssetImage(
+                  AppImages.splashLogo,
                   width: 183,
                   height: 183,
                 ),

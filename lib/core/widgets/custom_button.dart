@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
-class AuthButton extends StatelessWidget {
-  const AuthButton({
+class CustomButton extends StatelessWidget {
+  const CustomButton({
     required this.text,
     required this.onPressed,
     this.borderRadius = 12,
@@ -22,8 +22,8 @@ class AuthButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: AuthColors.primary,
-          disabledBackgroundColor: AuthColors.primary.withValues(alpha: 0.5),
+          backgroundColor: AppColors.primary,
+          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),

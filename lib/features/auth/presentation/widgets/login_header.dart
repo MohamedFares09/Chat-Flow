@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_asset_image.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_assets.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/core/utils/app_images.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
@@ -14,7 +14,7 @@ class LoginHeader extends StatelessWidget {
           width: 64,
           height: 64,
           decoration: BoxDecoration(
-            color: AuthColors.primary,
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(
@@ -25,8 +25,8 @@ class LoginHeader extends StatelessWidget {
             ],
           ),
           child: const Center(
-            child: AuthAssetImage(
-              AuthAssets.chatIcon,
+            child: CustomAssetImage(
+              AppImages.chatIcon,
               width: 34,
               height: 34,
             ),
@@ -36,7 +36,7 @@ class LoginHeader extends StatelessWidget {
         const Text(
           'ChatFlow',
           style: TextStyle(
-            color: AuthColors.title,
+            color: AppColors.title,
             fontSize: 32,
             fontWeight: FontWeight.w700,
             height: 1.25,
@@ -47,7 +47,7 @@ class LoginHeader extends StatelessWidget {
           'Securely connect with your team and\nfriends across the globe.',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: AuthColors.body,
+            color: AppColors.body,
             fontSize: 16,
             height: 1.5,
           ),

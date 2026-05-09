@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/auth/presentation/cubits/login/login_cubit.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_progress_hud.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_snackbar.dart';
+import 'package:test_codex/core/widgets/custom_progress_hud.dart';
+import 'package:test_codex/core/widgets/build_snack_bar.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_view_body.dart';
 
 class LoginViewBodyBlocConsumer extends StatelessWidget {
@@ -13,13 +13,13 @@ class LoginViewBodyBlocConsumer extends StatelessWidget {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginErrorState) {
-          showAuthSnackBar(
+          buildSnackBar(
             context,
             message: state.message,
             color: Colors.redAccent,
           );
         } else if (state is LoginSuccessState) {
-          showAuthSnackBar(
+          buildSnackBar(
             context,
             message: 'Signed in successfully.',
             color: Colors.green,
@@ -27,7 +27,7 @@ class LoginViewBodyBlocConsumer extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return AuthProgressHud(
+        return CustomProgressHud(
           isLoading: state is LoginLoadingState,
           child: const LoginViewBody(),
         );

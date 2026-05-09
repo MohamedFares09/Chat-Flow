@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AuthColors {
+class AppColors {
   static const Color scaffold = Color(0xff10131a);
   static const Color registerScaffold = Color(0xff0f0f1a);
   static const Color card = Color(0xb31c1c2e);

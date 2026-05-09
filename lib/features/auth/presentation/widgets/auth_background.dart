@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class AuthBackground extends StatelessWidget {
   const AuthBackground({
@@ -18,8 +18,8 @@ class AuthBackground extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: useRegisterColor
-            ? AuthColors.registerScaffold
-            : AuthColors.scaffold,
+            ? AppColors.registerScaffold
+            : AppColors.scaffold,
       ),
       child: Stack(
         children: [
@@ -27,7 +27,7 @@ class AuthBackground extends StatelessWidget {
             left: -39,
             top: -88,
             child: _Glow(
-              color: AuthColors.primary.withValues(alpha: 0.2),
+              color: AppColors.primary.withValues(alpha: 0.2),
             ),
           ),
           Positioned(

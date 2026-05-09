@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AuthAssetImage extends StatelessWidget {
-  const AuthAssetImage(
+class CustomAssetImage extends StatelessWidget {
+  const CustomAssetImage(
     this.asset, {
     this.width,
     this.height,

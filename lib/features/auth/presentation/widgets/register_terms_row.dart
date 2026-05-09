@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class RegisterTermsRow extends StatelessWidget {
   const RegisterTermsRow({
@@ -23,7 +23,7 @@ class RegisterTermsRow extends StatelessWidget {
             value: agreedToTerms,
             onChanged: onChanged,
             side: const BorderSide(color: Color(0xff414754)),
-            activeColor: AuthColors.primary,
+            activeColor: AppColors.primary,
             checkColor: Colors.white,
           ),
         ),
@@ -32,7 +32,7 @@ class RegisterTermsRow extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: const TextStyle(
-                color: AuthColors.body,
+                color: AppColors.body,
                 fontSize: 14,
                 height: 1.43,
               ),
@@ -54,7 +54,7 @@ class RegisterTermsRow extends StatelessWidget {
     return TextSpan(
       text: text,
       style: const TextStyle(
-        color: AuthColors.accent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w700,
         decoration: TextDecoration.underline,
         decorationColor: Color(0x4dadc7ff),

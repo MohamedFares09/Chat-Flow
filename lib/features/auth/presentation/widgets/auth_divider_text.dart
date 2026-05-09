@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 
 class AuthDividerText extends StatelessWidget {
   const AuthDividerText({super.key});
@@ -14,7 +14,7 @@ class AuthDividerText extends StatelessWidget {
           child: Text(
             'OR',
             style: TextStyle(
-              color: AuthColors.body,
+              color: AppColors.body,
               fontSize: 12,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.6,

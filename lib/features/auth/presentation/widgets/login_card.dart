@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_asset_image.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_assets.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_button.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_colors.dart';
+import 'package:test_codex/core/utils/validators.dart';
+import 'package:test_codex/core/widgets/custom_asset_image.dart';
+import 'package:test_codex/core/utils/app_images.dart';
+import 'package:test_codex/core/widgets/custom_button.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/auth/presentation/widgets/auth_divider_text.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_snackbar.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_text_form_field.dart';
+import 'package:test_codex/core/widgets/build_snack_bar.dart';
+import 'package:test_codex/core/widgets/custom_text_form_field.dart';
 
 class LoginCard extends StatelessWidget {
   const LoginCard({
@@ -28,9 +29,9 @@ class LoginCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(33),
       decoration: BoxDecoration(
-        color: AuthColors.card,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AuthColors.border),
+        border: Border.all(color: AppColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x40000000),
@@ -44,14 +45,14 @@ class LoginCard extends StatelessWidget {
         autovalidateMode: autovalidateMode,
         child: Column(
           children: [
-            AuthTextFormField(
+            CustomTextFormField(
               hintText: 'Email Address',
               keyboardType: TextInputType.emailAddress,
               onSaved: onEmailSaved,
-              validator: _emailValidator,
+              validator: Validators.email,
             ),
             const SizedBox(height: 16),
-            AuthTextFormField(
+            CustomTextFormField(
               hintText: 'Password',
               obscureText: true,
               onSaved: onPasswordSaved,
@@ -61,16 +62,16 @@ class LoginCard extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  showAuthSnackBar(
+                  buildSnackBar(
                     context,
                     message: 'Password reset will be added soon.',
-                    color: AuthColors.primary,
+                    color: AppColors.primary,
                   );
                 },
                 child: const Text(
                   'Forgot Password?',
                   style: TextStyle(
-                    color: AuthColors.accent,
+                    color: AppColors.accent,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.6,
@@ -79,21 +80,21 @@ class LoginCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            AuthButton(text: 'Sign In', onPressed: onSubmit),
+            CustomButton(text: 'Sign In', onPressed: onSubmit),
             const SizedBox(height: 16),
             const AuthDividerText(),
             const SizedBox(height: 16),
             OutlinedButton(
               onPressed: () {
-                showAuthSnackBar(
+                buildSnackBar(
                   context,
                   message: 'Google sign in needs google_sign_in setup.',
-                  color: AuthColors.primary,
+                  color: AppColors.primary,
                 );
               },
               style: OutlinedButton.styleFrom(
                 fixedSize: const Size.fromHeight(56),
-                side: const BorderSide(color: AuthColors.mutedBorder),
+                side: const BorderSide(color: AppColors.mutedBorder),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -101,12 +102,12 @@ class LoginCard extends StatelessWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AuthAssetImage(AuthAssets.google, width: 20, height: 20),
+                  CustomAssetImage(AppImages.google, width: 20, height: 20),
                   SizedBox(width: 8),
                   Text(
                     'Continue with Google',
                     style: TextStyle(
-                      color: AuthColors.title,
+                      color: AppColors.title,
                       fontSize: 16,
                       height: 1.5,
                     ),
@@ -120,13 +121,4 @@ class LoginCard extends StatelessWidget {
     );
   }
 
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Email is required.';
-    }
-    if (!value.contains('@')) {
-      return 'Please enter a valid email address.';
-    }
-    return null;
-  }
 }

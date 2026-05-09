@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/auth/presentation/cubits/register/register_cubit.dart';
 import 'package:test_codex/features/auth/presentation/views/login_view.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_progress_hud.dart';
-import 'package:test_codex/features/auth/presentation/widgets/auth_snackbar.dart';
+import 'package:test_codex/core/widgets/custom_progress_hud.dart';
+import 'package:test_codex/core/widgets/build_snack_bar.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_view_body.dart';
 
 class RegisterViewBodyBlocConsumer extends StatelessWidget {
@@ -14,13 +14,13 @@ class RegisterViewBodyBlocConsumer extends StatelessWidget {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterErrorState) {
-          showAuthSnackBar(
+          buildSnackBar(
             context,
             message: state.message,
             color: Colors.redAccent,
           );
         } else if (state is RegisterSuccessState) {
-          showAuthSnackBar(
+          buildSnackBar(
             context,
             message: 'Account created successfully.',
             color: Colors.green,
@@ -29,7 +29,7 @@ class RegisterViewBodyBlocConsumer extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return AuthProgressHud(
+        return CustomProgressHud(
           isLoading: state is RegisterLoadingState,
           child: const RegisterViewBody(),
         );
