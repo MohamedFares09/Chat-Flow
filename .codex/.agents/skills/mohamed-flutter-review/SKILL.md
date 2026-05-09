@@ -32,6 +32,14 @@ git status
 git diff --stat
 ```
 
+## Core Reuse Checklist
+
+- [ ] Shared widgets are placed in `core/`, not inside a feature.
+- [ ] Feature-only widgets remain inside the feature.
+- [ ] Colors, images, text styles, validators, and helpers are centralized in `core/`.
+- [ ] No duplicated shared widgets/constants exist across features.
+- [ ] Existing `core/` utilities were checked before creating new ones.
+
 ## Output
 
 Summarize:

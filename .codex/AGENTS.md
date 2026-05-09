@@ -16,12 +16,13 @@ This file should stay short. Detailed workflows live in .agents/skills.
 ## Core Style
 
 - Use feature-first structure.
-- Use Cubit/Bloc for state management.
+- Use Cubit for state management.
 - Use `getIt` / service locator if the project uses dependency injection.
 - Use `Either<Failure, T>` for repository results when the project uses `dartz`.
 - Keep UI, Cubit, domain, and data responsibilities separate.
 - Reuse existing custom widgets when available.
 - If custom widgets do not exist, create small reusable equivalents.
+- 
 
 ## Mandatory Workflow
 
@@ -31,6 +32,50 @@ This file should stay short. Detailed workflows live in .agents/skills.
 - Before creating a complete feature, use `mohamed-flutter-feature`.
 - Before marking work done, use `mohamed-flutter-review`.
 - After approval and only when requested, use `mohamed-flutter-pr`.
+
+## Shared vs Feature-Specific Code Rule
+
+Before creating any widget, constant, helper, validator, extension, color, asset path, style, or component, decide if it is feature-specific or shared.
+
+### Put in `core/` when:
+- It is used by 2+ features
+- It is part of the app design system
+- It is a generic reusable widget
+- It is a common validator/helper/extension
+- It is a shared color, spacing, text style, icon, or asset path
+- It is not tied to one feature's business meaning
+
+Examples:
+- `CustomButton`
+- `CustomTextFormField`
+- `PasswordField`
+- `CustomProgressHUD`
+- `AppColors`
+- `AppImages`
+- `AppTextStyles`
+- `Validators`
+- `buildsnakbar`
+- `buildAppBar`
+
+### Put in `features/<feature>/presentation/widgets/` when:
+- It is only meaningful inside one feature
+- It depends on feature-specific Cubit/state
+- It represents a section of one screen
+- It is unlikely to be reused elsewhere
+
+Examples:
+- `SigninViewBody`
+- `SigninViewBodyBlocConsumer`
+- `DoNotHaveAnAccount`
+- `ForgetPassword`
+- `LoginSocialMedia`
+- `OrDivider`
+
+### Rule:
+- Do not put shared code inside a feature.
+- Do not put feature-specific code inside `core/`.
+- If a feature widget becomes reused by another feature, move it to `core/`.
+- Before creating new shared code, search `core/` first.
 
 ## Never Do
 
