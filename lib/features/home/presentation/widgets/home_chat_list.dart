@@ -4,9 +4,14 @@ import 'package:test_codex/features/home/presentation/widgets/home_chat_tile.dar
 import 'package:test_codex/features/home/presentation/widgets/home_empty_conversations.dart';
 
 class HomeChatList extends StatelessWidget {
-  const HomeChatList({required this.conversations, super.key});
+  const HomeChatList({
+    required this.conversations,
+    required this.onConversationTap,
+    super.key,
+  });
 
   final List<ConversationEntity> conversations;
+  final ValueChanged<ConversationEntity> onConversationTap;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,10 @@ class HomeChatList extends StatelessWidget {
           .map(
             (conversation) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: HomeChatTile(conversation: conversation),
+              child: HomeChatTile(
+                conversation: conversation,
+                onTap: () => onConversationTap(conversation),
+              ),
             ),
           )
           .toList(),

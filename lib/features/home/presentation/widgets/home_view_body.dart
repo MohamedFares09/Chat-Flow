@@ -12,6 +12,7 @@ import 'package:test_codex/features/home/presentation/widgets/home_fab.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_header.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_search_results.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_stories_section.dart';
+import 'package:test_codex/features/message/presentation/views/message_view.dart';
 
 class HomeViewBody extends StatefulWidget {
   const HomeViewBody({
@@ -74,7 +75,16 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                           ),
                         ],
                         const SizedBox(height: 24),
-                        HomeChatList(conversations: widget.conversations),
+                        HomeChatList(
+                          conversations: widget.conversations,
+                          onConversationTap: (conversation) {
+                            Navigator.pushNamed(
+                              context,
+                              MessageView.route,
+                              arguments: conversation,
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

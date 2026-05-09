@@ -7,6 +7,9 @@ import 'package:test_codex/features/auth/domain/repos/auth_repo.dart';
 import 'package:test_codex/features/home/data/repos/home_repo_impl.dart';
 import 'package:test_codex/features/home/data/services/home_firestore_service.dart';
 import 'package:test_codex/features/home/domain/repos/home_repo.dart';
+import 'package:test_codex/features/message/data/repos/message_repo_impl.dart';
+import 'package:test_codex/features/message/data/services/message_firestore_service.dart';
+import 'package:test_codex/features/message/domain/repos/message_repo.dart';
 import 'package:test_codex/features/settings/data/repos/settings_repo_impl.dart';
 import 'package:test_codex/features/settings/data/services/settings_firebase_service.dart';
 import 'package:test_codex/features/settings/domain/repos/settings_repo.dart';
@@ -46,6 +49,21 @@ void setupGetIt() {
   if (!getIt.isRegistered<HomeRepo>()) {
     getIt.registerLazySingleton<HomeRepo>(
       () => HomeRepoImpl(homeFirestoreService: getIt<HomeFirestoreService>()),
+    );
+  }
+  if (!getIt.isRegistered<MessageFirestoreService>()) {
+    getIt.registerLazySingleton<MessageFirestoreService>(
+      () => MessageFirestoreService(
+        firestore: getIt<FirebaseFirestore>(),
+        firebaseAuth: getIt<FirebaseAuth>(),
+      ),
+    );
+  }
+  if (!getIt.isRegistered<MessageRepo>()) {
+    getIt.registerLazySingleton<MessageRepo>(
+      () => MessageRepoImpl(
+        messageFirestoreService: getIt<MessageFirestoreService>(),
+      ),
     );
   }
   if (!getIt.isRegistered<SettingsFirebaseService>()) {

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:test_codex/features/auth/presentation/views/login_view.dart';
 import 'package:test_codex/features/auth/presentation/views/register_view.dart';
 import 'package:test_codex/features/auth/presentation/views/splash_view.dart';
+import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/home/presentation/views/home_view.dart';
+import 'package:test_codex/features/message/presentation/views/message_view.dart';
 import 'package:test_codex/features/settings/presentation/views/settings_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -15,6 +17,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const RegisterView());
     case HomeView.route:
       return MaterialPageRoute(builder: (_) => const HomeView());
+    case MessageView.route:
+      final conversation = settings.arguments as ConversationEntity;
+      return MaterialPageRoute(
+        builder: (_) => MessageView(conversation: conversation),
+      );
     case SettingsView.route:
       return MaterialPageRoute(builder: (_) => const SettingsView());
     default:

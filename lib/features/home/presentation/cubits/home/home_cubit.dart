@@ -54,8 +54,9 @@ class HomeCubit extends Cubit<HomeState> {
     final result = await homeRepo.createConversationWithUser(user);
     result.fold(
       (failure) => emit(HomeErrorState(failure.message)),
-      (_) async {
+      (conversation) async {
         searchResults = [];
+        emit(HomeConversationCreatedState(conversation));
         await getConversations();
       },
     );

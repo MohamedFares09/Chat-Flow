@@ -29,6 +29,12 @@ final class HomeSuccessState extends HomeState {
   final List<HomeUserEntity> searchResults;
 }
 
+final class HomeConversationCreatedState extends HomeState {
+  HomeConversationCreatedState(this.conversation);
+
+  final ConversationEntity conversation;
+}
+
 final class HomeErrorState extends HomeState {
   HomeErrorState(this.message);
 

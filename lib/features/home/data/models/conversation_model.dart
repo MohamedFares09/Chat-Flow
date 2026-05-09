@@ -28,6 +28,9 @@ class ConversationModel extends ConversationEntity {
     final participantEmails = Map<String, dynamic>.from(
       json['participantEmails'] ?? {},
     );
+    final participantPhotoUrls = Map<String, dynamic>.from(
+      json['participantPhotoUrls'] ?? {},
+    );
     final unreadCounts = Map<String, dynamic>.from(json['unreadCounts'] ?? {});
 
     return ConversationModel(
@@ -36,6 +39,7 @@ class ConversationModel extends ConversationEntity {
         uId: otherUserId,
         name: participantNames[otherUserId] ?? 'Unknown user',
         email: participantEmails[otherUserId] ?? '',
+        photoUrl: participantPhotoUrls[otherUserId],
       ),
       lastMessage: json['lastMessage'] ?? '',
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),

@@ -81,6 +81,10 @@ class HomeFirestoreService {
         currentUser.uid: currentUser.email ?? '',
         user.uId: user.email,
       },
+      'participantPhotoUrls': {
+        currentUser.uid: currentUser.photoURL,
+        user.uId: user.photoUrl,
+      },
       'participantNames': {
         currentUser.uid: currentName,
         user.uId: user.name,
