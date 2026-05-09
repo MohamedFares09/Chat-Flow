@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 
-class HomeSearchSection extends StatelessWidget {
-  const HomeSearchSection({
+class HomeTopSearchField extends StatelessWidget {
+  const HomeTopSearchField({
     required this.controller,
     required this.isLoading,
     required this.onSearch,
@@ -19,6 +19,7 @@ class HomeSearchSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      autofocus: true,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => onSearch(),
@@ -26,8 +27,8 @@ class HomeSearchSection extends StatelessWidget {
       style: const TextStyle(color: AppColors.title, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.card,
-        hintText: 'Search users by email',
+        fillColor: AppColors.input,
+        hintText: 'Search email',
         hintStyle: const TextStyle(color: AppColors.body),
         prefixIcon: const Icon(Icons.search, color: AppColors.body),
         suffixIcon: isLoading
@@ -43,15 +44,15 @@ class HomeSearchSection extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: onClear,
-                    icon: const Icon(Icons.close, color: AppColors.body),
-                  ),
-                  IconButton(
                     onPressed: onSearch,
                     icon: const Icon(
                       Icons.arrow_forward,
                       color: AppColors.accent,
                     ),
+                  ),
+                  IconButton(
+                    onPressed: onClear,
+                    icon: const Icon(Icons.close, color: AppColors.body),
                   ),
                 ],
               ),

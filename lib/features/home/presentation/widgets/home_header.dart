@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/features/home/presentation/widgets/home_top_search_field.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_user_avatar.dart';
 
-class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+class HomeHeader extends StatefulWidget {
+  const HomeHeader({
+    required this.searchController,
+    required this.isSearchLoading,
+    required this.onSearch,
+    required this.onClearSearch,
+    super.key,
+  });
+
+  final TextEditingController searchController;
+  final bool isSearchLoading;
+  final VoidCallback onSearch;
+  final VoidCallback onClearSearch;
+
+  @override
+  State<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> {
+  bool isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +39,42 @@ class HomeHeader extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         children: [
-          HomeUserAvatar(name: 'You', size: 40, showOnlineDot: true),
-          Spacer(),
-          Text(
-            'ChatFlow',
-            style: TextStyle(
-              color: AppColors.accent,
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              height: 1.25,
+          if (!isSearching) ...[
+            const HomeUserAvatar(name: 'You', size: 40, showOnlineDot: true),
+            const Spacer(),
+            const Text(
+              'ChatFlow',
+              style: TextStyle(
+                color: AppColors.accent,
+                fontSize: 32,
+                fontWeight: FontWeight.w700,
+                height: 1.25,
+              ),
             ),
-          ),
-          Spacer(),
-          Icon(Icons.search, color: AppColors.body, size: 22),
-          SizedBox(width: 16),
-          Icon(Icons.more_vert, color: AppColors.body, size: 22),
+            const Spacer(),
+            IconButton(
+              onPressed: () {
+                setState(() => isSearching = true);
+              },
+              icon: const Icon(Icons.search, color: AppColors.body, size: 22),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.more_vert, color: AppColors.body, size: 22),
+          ] else ...[
+            Expanded(
+              child: HomeTopSearchField(
+                controller: widget.searchController,
+                isLoading: widget.isSearchLoading,
+                onSearch: widget.onSearch,
+                onClear: () {
+                  widget.onClearSearch();
+                  setState(() => isSearching = false);
+                },
+              ),
+            ),
+          ],
         ],
       ),
     );

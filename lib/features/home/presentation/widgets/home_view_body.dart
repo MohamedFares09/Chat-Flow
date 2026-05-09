@@ -10,7 +10,6 @@ import 'package:test_codex/features/home/presentation/widgets/home_chat_list.dar
 import 'package:test_codex/features/home/presentation/widgets/home_fab.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_header.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_search_results.dart';
-import 'package:test_codex/features/home/presentation/widgets/home_search_section.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_stories_section.dart';
 
 class HomeViewBody extends StatefulWidget {
@@ -47,7 +46,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           children: [
             Column(
               children: [
-                const HomeHeader(),
+                HomeHeader(
+                  searchController: searchController,
+                  isSearchLoading: widget.isSearchLoading,
+                  onSearch: _search,
+                  onClearSearch: _clearSearch,
+                ),
                 Expanded(
                   child: RefreshIndicator(
                     color: AppColors.primary,
@@ -56,15 +60,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
                       children: [
                         const HomeStoriesSection(),
-                        const SizedBox(height: 24),
-                        HomeSearchSection(
-                          controller: searchController,
-                          isLoading: widget.isSearchLoading,
-                          onSearch: _search,
-                          onClear: _clearSearch,
-                        ),
                         if (widget.searchResults.isNotEmpty) ...[
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 24),
                           HomeSearchResults(
                             users: widget.searchResults,
                             onStartConversation: (user) {
