@@ -4,7 +4,6 @@ import 'package:test_codex/features/auth/presentation/cubits/register/register_c
 import 'package:test_codex/features/auth/presentation/widgets/auth_background.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_card.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_footer.dart';
-import 'package:test_codex/features/auth/presentation/widgets/register_footer_graphics.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_header.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_top_bar.dart';
 
@@ -55,8 +54,6 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     ),
                     const SizedBox(height: 32),
                     const RegisterFooter(),
-                    const SizedBox(height: 48),
-                    const RegisterFooterGraphics(),
                   ],
                 ),
               ),

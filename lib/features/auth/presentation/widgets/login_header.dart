@@ -26,7 +26,7 @@ class LoginHeader extends StatelessWidget {
           ),
           child: const Center(
             child: CustomAssetImage(
-              AppImages.chatIcon,
+              AppImages.loginLogo,
               width: 34,
               height: 34,
             ),

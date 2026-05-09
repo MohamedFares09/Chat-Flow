@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/core/widgets/custom_asset_image.dart';
-import 'package:test_codex/core/utils/app_images.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 
 class RegisterTopBar extends StatelessWidget {
@@ -25,10 +23,10 @@ class RegisterTopBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const CustomAssetImage(
-              AppImages.backIcon,
-              width: 16,
-              height: 16,
+            icon: const Icon(
+              Icons.arrow_back,
+              color: AppColors.accent,
+              size: 20,
             ),
           ),
           const SizedBox(width: 4),
@@ -42,7 +40,11 @@ class RegisterTopBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const CustomAssetImage(AppImages.infoIcon, width: 20, height: 20),
+          const Icon(
+            Icons.info_outline,
+            color: AppColors.body,
+            size: 20,
+          ),
         ],
       ),
     );

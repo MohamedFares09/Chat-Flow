@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/validators.dart';
-import 'package:test_codex/core/utils/app_images.dart';
 import 'package:test_codex/core/widgets/custom_button.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/auth/presentation/widgets/register_avatar_upload.dart';
@@ -57,14 +56,22 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'FULL NAME',
               hintText: 'Alex Rivers',
-              prefixAsset: AppImages.userIcon,
+              prefixIcon: const Icon(
+                Icons.person_outline,
+                color: AppColors.body,
+                size: 18,
+              ),
               onSaved: onNameSaved,
             ),
             const SizedBox(height: 16),
             RegisterLabeledField(
               label: 'EMAIL ADDRESS',
               hintText: 'alex@chatflow.io',
-              prefixAsset: AppImages.emailIcon,
+              prefixIcon: const Icon(
+                Icons.alternate_email,
+                color: AppColors.body,
+                size: 18,
+              ),
               keyboardType: TextInputType.emailAddress,
               onSaved: onEmailSaved,
               validator: Validators.email,
@@ -73,7 +80,11 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'PASSWORD',
               hintText: 'Password',
-              prefixAsset: AppImages.lockIcon,
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+                color: AppColors.body,
+                size: 18,
+              ),
               obscureText: true,
               onSaved: onPasswordSaved,
               validator: Validators.password,
@@ -82,7 +93,11 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'CONFIRM PASSWORD',
               hintText: 'Confirm password',
-              prefixAsset: AppImages.shieldIcon,
+              prefixIcon: const Icon(
+                Icons.shield_outlined,
+                color: AppColors.body,
+                size: 18,
+              ),
               obscureText: true,
               onSaved: onConfirmSaved,
               validator: Validators.password,

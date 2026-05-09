@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/validators.dart';
-import 'package:test_codex/core/widgets/custom_asset_image.dart';
-import 'package:test_codex/core/utils/app_images.dart';
 import 'package:test_codex/core/widgets/custom_button.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/auth/presentation/widgets/auth_divider_text.dart';
@@ -102,7 +100,11 @@ class LoginCard extends StatelessWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomAssetImage(AppImages.google, width: 20, height: 20),
+                  Icon(
+                    Icons.g_mobiledata,
+                    color: AppColors.title,
+                    size: 24,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Continue with Google',
@@ -120,5 +122,4 @@ class LoginCard extends StatelessWidget {
       ),
     );
   }
-
 }

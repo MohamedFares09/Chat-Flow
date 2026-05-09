@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test_codex/core/widgets/custom_asset_image.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/core/utils/validators.dart';
 
@@ -9,7 +8,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.onSaved,
     this.validator,
     this.keyboardType,
-    this.prefixAsset,
+    this.prefixIcon,
     this.obscureText = false,
     this.fillColor = AppColors.input,
     this.borderRadius = 12,
@@ -21,7 +20,7 @@ class CustomTextFormField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
-  final String? prefixAsset;
+  final Widget? prefixIcon;
   final bool obscureText;
   final Color fillColor;
   final double borderRadius;
@@ -66,15 +65,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             height: 1.5,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          prefixIcon: widget.prefixAsset == null
+          prefixIcon: widget.prefixIcon == null
               ? null
               : Padding(
                   padding: const EdgeInsets.only(left: 17, right: 8),
-                  child: CustomAssetImage(
-                    widget.prefixAsset!,
-                    width: 18,
-                    height: 18,
-                  ),
+                  child: widget.prefixIcon,
                 ),
           prefixIconConstraints: const BoxConstraints(
             minWidth: 43,

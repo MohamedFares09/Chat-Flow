@@ -4,6 +4,7 @@ import 'package:test_codex/features/auth/presentation/cubits/login/login_cubit.d
 import 'package:test_codex/features/auth/presentation/views/register_view.dart';
 import 'package:test_codex/features/auth/presentation/widgets/auth_background.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_card.dart';
+import 'package:test_codex/features/auth/presentation/widgets/login_decoration_graphics.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_footer.dart';
 import 'package:test_codex/features/auth/presentation/widgets/login_header.dart';
 
@@ -41,6 +42,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     onSubmit: _submit,
                   ),
                   const SizedBox(height: 32),
+                  const LoginDecorationGraphics(),
+                  const SizedBox(height: 16),
                   LoginFooter(
                     onRegisterTap: () {
                       Navigator.pushNamed(context, RegisterView.route);

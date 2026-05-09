@@ -7,7 +7,7 @@ class RegisterLabeledField extends StatelessWidget {
     required this.label,
     required this.hintText,
     required this.onSaved,
-    required this.prefixAsset,
+    required this.prefixIcon,
     this.validator,
     this.keyboardType,
     this.obscureText = false,
@@ -19,7 +19,7 @@ class RegisterLabeledField extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
-  final String prefixAsset;
+  final Widget prefixIcon;
   final bool obscureText;
 
   @override
@@ -46,7 +46,7 @@ class RegisterLabeledField extends StatelessWidget {
           onSaved: onSaved,
           validator: validator,
           keyboardType: keyboardType,
-          prefixAsset: prefixAsset,
+          prefixIcon: prefixIcon,
           obscureText: obscureText,
           fillColor: AppColors.registerInput,
           borderRadius: 16,

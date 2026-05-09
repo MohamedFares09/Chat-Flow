@@ -32,7 +32,7 @@ class RegisterAvatarUpload extends StatelessWidget {
                     const Opacity(
                       opacity: 0.5,
                       child: CustomAssetImage(
-                        AppImages.profilePlaceholder,
+                        AppImages.registerProfile,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -40,10 +40,10 @@ class RegisterAvatarUpload extends StatelessWidget {
                       color: AppColors.scaffold.withValues(alpha: 0.4),
                     ),
                     const Center(
-                      child: CustomAssetImage(
-                        AppImages.cameraIcon,
-                        width: 25,
-                        height: 23,
+                      child: Icon(
+                        Icons.photo_camera_outlined,
+                        color: AppColors.accent,
+                        size: 25,
                       ),
                     ),
                   ],
@@ -53,10 +53,14 @@ class RegisterAvatarUpload extends StatelessWidget {
             const Positioned(
               right: -2,
               bottom: -2,
-              child: CustomAssetImage(
-                AppImages.avatarAdd,
-                width: 45,
-                height: 53,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: AppColors.primary,
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
             ),
           ],
