@@ -19,6 +19,24 @@ class SettingsCubit extends Cubit<SettingsState> {
       (failure) => emit(SettingsErrorState(failure.message)),
       (user) {
         currentUser = user;
+        emit(SettingsUpdateSuccessState(user));
+      },
+    );
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    String? imagePath,
+  }) async {
+    emit(SettingsUpdateLoadingState(currentUser));
+    final result = await settingsRepo.updateProfile(
+      name: name,
+      imagePath: imagePath,
+    );
+    result.fold(
+      (failure) => emit(SettingsErrorState(failure.message)),
+      (user) {
+        currentUser = user;
         emit(SettingsSuccessState(user));
       },
     );

@@ -6,10 +6,12 @@ import 'package:test_codex/features/settings/presentation/widgets/settings_profi
 class SettingsProfileCard extends StatelessWidget {
   const SettingsProfileCard({
     required this.user,
+    required this.onEditProfile,
     super.key,
   });
 
   final SettingsUserEntity? user;
+  final VoidCallback onEditProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class SettingsProfileCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: onEditProfile,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,

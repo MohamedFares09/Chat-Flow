@@ -5,5 +5,10 @@ import 'package:test_codex/features/settings/domain/entities/settings_user_entit
 abstract class SettingsRepo {
   Future<Either<Failure, SettingsUserEntity>> getCurrentUser();
 
+  Future<Either<Failure, SettingsUserEntity>> updateProfile({
+    required String name,
+    String? imagePath,
+  });
+
   Future<Either<Failure, Unit>> logout();
 }

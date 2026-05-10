@@ -19,6 +19,12 @@ class SettingsViewBodyBlocConsumer extends StatelessWidget {
             message: state.message,
             color: Colors.redAccent,
           );
+        } else if (state is SettingsUpdateSuccessState) {
+          buildSnackBar(
+            context,
+            message: 'Profile updated successfully.',
+            color: Colors.green,
+          );
         } else if (state is SettingsLogoutSuccessState) {
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -31,6 +37,7 @@ class SettingsViewBodyBlocConsumer extends StatelessWidget {
         final cubit = context.read<SettingsCubit>();
         return CustomProgressHud(
           isLoading: state is SettingsLoadingState ||
+              state is SettingsUpdateLoadingState ||
               state is SettingsLogoutLoadingState,
           child: SettingsViewBody(user: cubit.currentUser),
         );

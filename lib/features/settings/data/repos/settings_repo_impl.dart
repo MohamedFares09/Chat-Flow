@@ -26,6 +26,25 @@ class SettingsRepoImpl extends SettingsRepo {
   }
 
   @override
+  Future<Either<Failure, SettingsUserEntity>> updateProfile({
+    required String name,
+    String? imagePath,
+  }) async {
+    try {
+      final user = await settingsFirebaseService.updateProfile(
+        name: name,
+        imagePath: imagePath,
+      );
+      return right(user);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception SettingsRepoImpl - updateProfile: $e');
+      return left(const ServerFailure('Something went wrong. Please try again.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, Unit>> logout() async {
     try {
       await settingsFirebaseService.logout();

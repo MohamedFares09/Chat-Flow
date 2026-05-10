@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -94,10 +95,14 @@ class HomeFirestoreService {
         .snapshots()
         .map((snapshot) {
       final now = DateTime.now();
+      final expiredStories = snapshot.docs.where((doc) {
+        return !_isStoryActive(doc.data(), now);
+      }).toList();
+      unawaited(_deleteExpiredStories(expiredStories));
+
       final stories = snapshot.docs
           .where((doc) {
-            final expiresAt = doc.data()['expiresAt'];
-            return expiresAt is Timestamp && expiresAt.toDate().isAfter(now);
+            return _isStoryActive(doc.data(), now);
           })
           .map(
             (doc) => HomeStoryModel.fromFirestore(
@@ -110,6 +115,20 @@ class HomeFirestoreService {
       stories.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return stories;
     });
+  }
+
+  bool _isStoryActive(Map<String, dynamic> data, DateTime now) {
+    final expiresAt = data['expiresAt'];
+    if (expiresAt is Timestamp) {
+      return expiresAt.toDate().isAfter(now);
+    }
+
+    final createdAt = data['createdAt'];
+    if (createdAt is Timestamp) {
+      return createdAt.toDate().add(const Duration(hours: 24)).isAfter(now);
+    }
+
+    return false;
   }
 
   Future<void> addStory(String content) async {
@@ -197,6 +216,33 @@ class HomeFirestoreService {
     await firestore.collection('stories').doc(storyId).set({
       'viewedBy': FieldValue.arrayUnion([_currentUserId]),
     }, SetOptions(merge: true));
+  }
+
+  Future<void> _deleteExpiredStories(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> stories,
+  ) async {
+    if (stories.isEmpty) {
+      return;
+    }
+
+    final batch = firestore.batch();
+    final mediaDeletes = <Future<void>>[];
+    for (final story in stories) {
+      final mediaUrl = story.data()['mediaUrl'];
+      if (mediaUrl is String && mediaUrl.trim().isNotEmpty) {
+        mediaDeletes.add(_deleteStoryMedia(mediaUrl));
+      }
+      batch.delete(story.reference);
+    }
+
+    await Future.wait(mediaDeletes);
+    await batch.commit();
+  }
+
+  Future<void> _deleteStoryMedia(String mediaUrl) async {
+    try {
+      await firebaseStorage.refFromURL(mediaUrl).delete();
+    } catch (_) {}
   }
 
   Future<List<HomeUserModel>> searchUsersByEmail(String email) async {

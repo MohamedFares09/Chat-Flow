@@ -13,6 +13,18 @@ final class SettingsSuccessState extends SettingsState {
   final SettingsUserEntity user;
 }
 
+final class SettingsUpdateLoadingState extends SettingsState {
+  SettingsUpdateLoadingState(this.user);
+
+  final SettingsUserEntity? user;
+}
+
+final class SettingsUpdateSuccessState extends SettingsState {
+  SettingsUpdateSuccessState(this.user);
+
+  final SettingsUserEntity user;
+}
+
 final class SettingsLogoutLoadingState extends SettingsState {
   SettingsLogoutLoadingState(this.user);
 

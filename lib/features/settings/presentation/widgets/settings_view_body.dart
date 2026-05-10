@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/core/utils/route_names.dart';
 import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/core/widgets/app_bottom_nav_bar.dart';
 import 'package:test_codex/features/settings/domain/entities/settings_user_entity.dart';
+import 'package:test_codex/features/settings/presentation/models/settings_profile_update_data.dart';
 import 'package:test_codex/features/settings/presentation/cubits/settings/settings_cubit.dart';
+import 'package:test_codex/features/settings/presentation/widgets/settings_edit_profile_sheet.dart';
 import 'package:test_codex/features/settings/presentation/widgets/settings_header.dart';
 import 'package:test_codex/features/settings/presentation/widgets/settings_logout_button.dart';
 import 'package:test_codex/features/settings/presentation/widgets/settings_profile_card.dart';
@@ -36,7 +39,10 @@ class SettingsViewBody extends StatelessWidget {
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
                       children: [
-                        SettingsProfileCard(user: user),
+                        SettingsProfileCard(
+                          user: user,
+                          onEditProfile: () => _showEditProfileSheet(context),
+                        ),
                         const SizedBox(height: 24),
                         const SettingsSection(
                           title: 'Account',
@@ -121,5 +127,25 @@ class SettingsViewBody extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showEditProfileSheet(BuildContext context) async {
+    final result = await showModalBottomSheet<SettingsProfileUpdateData>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: AppColors.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (_) => SettingsEditProfileSheet(user: user),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    await context.read<SettingsCubit>().updateProfile(
+          name: result.name,
+          imagePath: result.imagePath,
+        );
   }
 }

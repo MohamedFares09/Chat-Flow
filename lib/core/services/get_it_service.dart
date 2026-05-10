@@ -78,6 +78,7 @@ void setupGetIt() {
       () => SettingsFirebaseService(
         firebaseAuth: getIt<FirebaseAuth>(),
         firestore: getIt<FirebaseFirestore>(),
+        firebaseStorage: getIt<FirebaseStorage>(),
       ),
     );
   }
