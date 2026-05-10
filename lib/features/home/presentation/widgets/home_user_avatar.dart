@@ -7,6 +7,7 @@ class HomeUserAvatar extends StatelessWidget {
     this.size = 56,
     this.showOnlineDot = false,
     this.backgroundColor,
+    this.photoUrl,
     super.key,
   });
 
@@ -14,9 +15,12 @@ class HomeUserAvatar extends StatelessWidget {
   final double size;
   final bool showOnlineDot;
   final Color? backgroundColor;
+  final String? photoUrl;
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = photoUrl?.trim();
+    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -35,15 +39,21 @@ class HomeUserAvatar extends StatelessWidget {
             color: backgroundColor,
             border: Border.all(color: AppColors.mutedBorder),
           ),
-          child: Center(
-            child: Text(
-              _initials,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: size * 0.32,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+          child: ClipOval(
+            child: hasImage
+                ? Image.network(
+                    imageUrl,
+                    width: size,
+                    height: size,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return _InitialsAvatar(
+                        initials: _initials,
+                        fontSize: size * 0.32,
+                      );
+                    },
+                  )
+                : _InitialsAvatar(initials: _initials, fontSize: size * 0.32),
           ),
         ),
         if (showOnlineDot)
@@ -74,5 +84,26 @@ class HomeUserAvatar extends StatelessWidget {
     }
     return '${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}'
         .toUpperCase();
+  }
+}
+
+class _InitialsAvatar extends StatelessWidget {
+  const _InitialsAvatar({required this.initials, required this.fontSize});
+
+  final String initials;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        initials,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
   }
 }

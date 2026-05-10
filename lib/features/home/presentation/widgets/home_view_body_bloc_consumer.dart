@@ -33,8 +33,10 @@ class HomeViewBodyBlocConsumer extends StatelessWidget {
           isLoading: state is HomeLoadingState || state is HomeActionLoadingState,
           child: HomeViewBody(
             conversations: cubit.conversations,
+            stories: cubit.stories,
             searchResults: cubit.searchResults,
             isSearchLoading: state is HomeSearchLoadingState,
+            isStoryActionLoading: state is HomeStoryActionLoadingState,
           ),
         );
       },

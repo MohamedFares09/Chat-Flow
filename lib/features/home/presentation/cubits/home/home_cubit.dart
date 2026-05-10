@@ -1,7 +1,9 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
+import 'package:test_codex/features/home/domain/entities/home_story_entity.dart';
 import 'package:test_codex/features/home/domain/entities/home_user_entity.dart';
 import 'package:test_codex/features/home/domain/repos/home_repo.dart';
 
@@ -12,8 +14,26 @@ class HomeCubit extends Cubit<HomeState> {
 
   final HomeRepo homeRepo;
 
+  StreamSubscription<List<ConversationEntity>>? _conversationsSubscription;
+  StreamSubscription<List<HomeStoryEntity>>? _storiesSubscription;
   List<ConversationEntity> conversations = [];
+  List<HomeStoryEntity> stories = [];
   List<HomeUserEntity> searchResults = [];
+
+  void watchHome() {
+    emit(HomeLoadingState());
+    _conversationsSubscription?.cancel();
+    _conversationsSubscription = homeRepo.watchConversations().listen(
+      (items) {
+        conversations = items;
+        _watchStoriesForCurrentConversations();
+        _emitSuccess();
+      },
+      onError: (_) {
+        emit(HomeErrorState('Something went wrong. Please try again.'));
+      },
+    );
+  }
 
   Future<void> getConversations() async {
     emit(HomeLoadingState());
@@ -22,12 +42,8 @@ class HomeCubit extends Cubit<HomeState> {
       (failure) => emit(HomeErrorState(failure.message)),
       (items) {
         conversations = items;
-        emit(
-          HomeSuccessState(
-            conversations: conversations,
-            searchResults: searchResults,
-          ),
-        );
+        _watchStoriesForCurrentConversations();
+        _emitSuccess();
       },
     );
   }
@@ -39,12 +55,7 @@ class HomeCubit extends Cubit<HomeState> {
       (failure) => emit(HomeErrorState(failure.message)),
       (users) {
         searchResults = users;
-        emit(
-          HomeSuccessState(
-            conversations: conversations,
-            searchResults: searchResults,
-          ),
-        );
+        _emitSuccess();
       },
     );
   }
@@ -57,18 +68,82 @@ class HomeCubit extends Cubit<HomeState> {
       (conversation) async {
         searchResults = [];
         emit(HomeConversationCreatedState(conversation));
-        await getConversations();
       },
+    );
+  }
+
+  Future<void> addStory(String content) async {
+    emit(HomeStoryActionLoadingState());
+    final result = await homeRepo.addStory(content);
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (_) => _emitSuccess(),
+    );
+  }
+
+  Future<void> addMediaStory({
+    required String filePath,
+    required String type,
+    String content = '',
+  }) async {
+    emit(HomeStoryActionLoadingState());
+    final result = await homeRepo.addMediaStory(
+      filePath: filePath,
+      type: type,
+      content: content,
+    );
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (_) => _emitSuccess(),
+    );
+  }
+
+  Future<void> markStoryAsSeen(HomeStoryEntity story) async {
+    if (story.isSeen) {
+      return;
+    }
+
+    final result = await homeRepo.markStoryAsSeen(story.id);
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (_) {},
     );
   }
 
   void clearSearch() {
     searchResults = [];
+    _emitSuccess();
+  }
+
+  void _watchStoriesForCurrentConversations() {
+    _storiesSubscription?.cancel();
+    _storiesSubscription = homeRepo
+        .watchStoriesForChattedUsers(conversations)
+        .listen(
+          (items) {
+            stories = items;
+            _emitSuccess();
+          },
+          onError: (_) {
+            emit(HomeErrorState('Something went wrong. Please try again.'));
+          },
+        );
+  }
+
+  void _emitSuccess() {
     emit(
       HomeSuccessState(
         conversations: conversations,
         searchResults: searchResults,
+        stories: stories,
       ),
     );
+  }
+
+  @override
+  Future<void> close() {
+    _conversationsSubscription?.cancel();
+    _storiesSubscription?.cancel();
+    return super.close();
   }
 }

@@ -1,11 +1,8 @@
 import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/repos/message_repo.dart';
-
-part 'message_state.dart';
+import 'package:test_codex/features/message/presentation/cubits/message/message_state.dart';
 
 class MessageCubit extends Cubit<MessageState> {
   MessageCubit(this.messageRepo) : super(MessageInitialState());
@@ -17,15 +14,17 @@ class MessageCubit extends Cubit<MessageState> {
   void getMessages(String conversationId) {
     emit(MessageLoadingState());
     _messagesSubscription?.cancel();
-    _messagesSubscription = messageRepo.getMessages(conversationId).listen(
-      (items) {
-        messages = items;
-        emit(MessageSuccessState(messages));
-      },
-      onError: (_) {
-        emit(MessageErrorState('Something went wrong. Please try again.'));
-      },
-    );
+    _messagesSubscription = messageRepo
+        .getMessages(conversationId)
+        .listen(
+          (items) {
+            messages = items;
+            emit(MessageSuccessState(messages));
+          },
+          onError: (_) {
+            emit(MessageErrorState('Something went wrong. Please try again.'));
+          },
+        );
     markConversationAsRead(conversationId);
   }
 

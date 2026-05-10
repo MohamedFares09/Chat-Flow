@@ -23,10 +23,12 @@ final class HomeSuccessState extends HomeState {
   HomeSuccessState({
     required this.conversations,
     required this.searchResults,
+    required this.stories,
   });
 
   final List<ConversationEntity> conversations;
   final List<HomeUserEntity> searchResults;
+  final List<HomeStoryEntity> stories;
 }
 
 final class HomeConversationCreatedState extends HomeState {
@@ -34,6 +36,8 @@ final class HomeConversationCreatedState extends HomeState {
 
   final ConversationEntity conversation;
 }
+
+final class HomeStoryActionLoadingState extends HomeState {}
 
 final class HomeErrorState extends HomeState {
   HomeErrorState(this.message);

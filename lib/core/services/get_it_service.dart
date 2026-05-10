@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_codex/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:test_codex/features/auth/data/services/firebase_auth_service.dart';
@@ -25,6 +26,11 @@ void setupGetIt() {
       () => FirebaseFirestore.instance,
     );
   }
+  if (!getIt.isRegistered<FirebaseStorage>()) {
+    getIt.registerLazySingleton<FirebaseStorage>(
+      () => FirebaseStorage.instance,
+    );
+  }
   if (!getIt.isRegistered<FirebaseAuthService>()) {
     getIt.registerLazySingleton<FirebaseAuthService>(
       () => FirebaseAuthService(
@@ -43,6 +49,7 @@ void setupGetIt() {
       () => HomeFirestoreService(
         firestore: getIt<FirebaseFirestore>(),
         firebaseAuth: getIt<FirebaseAuth>(),
+        firebaseStorage: getIt<FirebaseStorage>(),
       ),
     );
   }

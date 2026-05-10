@@ -27,10 +27,11 @@ class HomeChatTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            HomeUserAvatar(
-              name: conversation.otherUser.name,
-              showOnlineDot: conversation.isOnline,
-            ),
+          HomeUserAvatar(
+            name: conversation.otherUser.name,
+            photoUrl: conversation.otherUser.photoUrl,
+            showOnlineDot: conversation.isOnline,
+          ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(

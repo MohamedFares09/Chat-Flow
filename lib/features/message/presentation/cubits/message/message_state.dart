@@ -1,6 +1,8 @@
-part of 'message_cubit.dart';
 
-@immutable
+
+
+import 'package:test_codex/features/message/domain/entities/message_entity.dart';
+
 sealed class MessageState {}
 
 final class MessageInitialState extends MessageState {}

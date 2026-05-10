@@ -4,6 +4,7 @@ import 'package:test_codex/core/widgets/build_snack_bar.dart';
 import 'package:test_codex/core/widgets/custom_progress_hud.dart';
 import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/message/presentation/cubits/message/message_cubit.dart';
+import 'package:test_codex/features/message/presentation/cubits/message/message_state.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_view_body.dart';
 
 class MessageViewBodyBlocConsumer extends StatelessWidget {
