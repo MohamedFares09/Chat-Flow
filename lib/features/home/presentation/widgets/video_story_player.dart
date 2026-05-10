@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/home/domain/entities/home_story_entity.dart';
+import 'package:test_codex/features/home/presentation/widgets/video_story_error.dart';
 
 class VideoStoryPlayer extends StatefulWidget {
   const VideoStoryPlayer({
@@ -38,7 +38,7 @@ class _VideoStoryPlayerState extends State<VideoStoryPlayer> {
   Widget build(BuildContext context) {
     final videoController = controller;
     if (hasError || widget.story.mediaUrl?.trim().isEmpty != false) {
-      return const _VideoStoryError();
+      return const VideoStoryError();
     }
 
     if (videoController == null || !videoController.value.isInitialized) {
@@ -108,27 +108,5 @@ class _VideoStoryPlayerState extends State<VideoStoryPlayer> {
     if (videoController.value.position >= videoController.value.duration) {
       widget.onFinished();
     }
-  }
-}
-
-class _VideoStoryError extends StatelessWidget {
-  const _VideoStoryError();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Text(
-          'Unable to play this video story.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.title,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
-    );
   }
 }

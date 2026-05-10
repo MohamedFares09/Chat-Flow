@@ -14,7 +14,9 @@ import 'package:test_codex/features/home/presentation/widgets/home_fab.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_header.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_search_results.dart';
 import 'package:test_codex/features/home/presentation/widgets/home_stories_section.dart';
+import 'package:test_codex/features/home/presentation/widgets/story_upload_result.dart';
 import 'package:test_codex/features/home/presentation/widgets/story_viewer_dialog.dart';
+import 'package:test_codex/features/home/presentation/widgets/story_upload_type.dart';
 import 'package:test_codex/features/message/presentation/views/message_view.dart';
 
 class HomeViewBody extends StatefulWidget {

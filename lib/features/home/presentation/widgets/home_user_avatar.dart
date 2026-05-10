@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/features/home/presentation/widgets/initials_avatar.dart';
 
 class HomeUserAvatar extends StatelessWidget {
   const HomeUserAvatar({
@@ -42,18 +43,18 @@ class HomeUserAvatar extends StatelessWidget {
           child: ClipOval(
             child: hasImage
                 ? Image.network(
-                    imageUrl,
+                    imageUrl!,
                     width: size,
                     height: size,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return _InitialsAvatar(
+                      return InitialsAvatar(
                         initials: _initials,
                         fontSize: size * 0.32,
                       );
                     },
                   )
-                : _InitialsAvatar(initials: _initials, fontSize: size * 0.32),
+                : InitialsAvatar(initials: _initials, fontSize: size * 0.32),
           ),
         ),
         if (showOnlineDot)
@@ -84,26 +85,5 @@ class HomeUserAvatar extends StatelessWidget {
     }
     return '${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}'
         .toUpperCase();
-  }
-}
-
-class _InitialsAvatar extends StatelessWidget {
-  const _InitialsAvatar({required this.initials, required this.fontSize});
-
-  final String initials;
-  final double fontSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        initials,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: fontSize,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
   }
 }
