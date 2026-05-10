@@ -11,7 +11,7 @@ class LoginFooter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+         Text(
           "Don't have an account? ",
           style: TextStyle(
             color: AppColors.body,
@@ -21,7 +21,7 @@ class LoginFooter extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onRegisterTap,
-          child: const Text(
+          child:  Text(
             'Register',
             style: TextStyle(
               color: AppColors.accent,

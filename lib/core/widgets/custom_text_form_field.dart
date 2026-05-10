@@ -10,7 +10,7 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType,
     this.prefixIcon,
     this.obscureText = false,
-    this.fillColor = AppColors.input,
+    this.fillColor,
     this.borderRadius = 12,
     this.hasBorder = false,
     super.key,
@@ -22,7 +22,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final Widget? prefixIcon;
   final bool obscureText;
-  final Color fillColor;
+  final Color? fillColor;
   final double borderRadius;
   final bool hasBorder;
 
@@ -38,7 +38,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadius),
       borderSide: widget.hasBorder
-          ? const BorderSide(color: AppColors.mutedBorder)
+          ? BorderSide(color: AppColors.mutedBorder)
           : BorderSide.none,
     );
 
@@ -50,16 +50,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         keyboardType: widget.keyboardType,
         obscureText: obscureText,
         cursorColor: AppColors.accent,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.title,
           fontSize: 16,
           height: 1.5,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: widget.fillColor,
+          fillColor: widget.fillColor ?? AppColors.input,
           hintText: widget.hintText,
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
             color: AppColors.body,
             fontSize: 16,
             height: 1.5,
@@ -92,13 +92,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           border: border,
           enabledBorder: border,
           focusedBorder: border.copyWith(
-            borderSide: const BorderSide(color: AppColors.accent),
+            borderSide: BorderSide(color: AppColors.accent),
           ),
           errorBorder: border.copyWith(
-            borderSide: const BorderSide(color: Colors.redAccent),
+            borderSide: BorderSide(color: Colors.redAccent),
           ),
           focusedErrorBorder: border.copyWith(
-            borderSide: const BorderSide(color: Colors.redAccent),
+            borderSide: BorderSide(color: Colors.redAccent),
           ),
         ),
       ),

@@ -38,7 +38,7 @@ class MessageComposer extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.emoji_emotions_outlined,
                     color: AppColors.body,
                     size: 22,
@@ -49,11 +49,11 @@ class MessageComposer extends StatelessWidget {
                       controller: controller,
                       minLines: 1,
                       maxLines: 4,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.title,
                         fontSize: 16,
                       ),
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Type a message...',
                         hintStyle: TextStyle(
@@ -67,14 +67,14 @@ class MessageComposer extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.attach_file,
                       color: AppColors.body,
                     ),
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.camera_alt_outlined,
                       color: AppColors.body,
                     ),
@@ -102,7 +102,7 @@ class MessageComposer extends StatelessWidget {
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Icon(Icons.send, color: Colors.white, size: 22),
+                  : Icon(Icons.send, color: Colors.white, size: 22),
             ),
           ),
         ],

@@ -20,15 +20,15 @@ class HomeSearchResultTile extends StatelessWidget {
       leading: HomeUserAvatar(name: user.name),
       title: Text(
         user.name,
-        style: const TextStyle(color: AppColors.title),
+        style: TextStyle(color: AppColors.title),
       ),
       subtitle: Text(
         user.email,
-        style: const TextStyle(color: AppColors.body),
+        style: TextStyle(color: AppColors.body),
       ),
       trailing: TextButton.icon(
         onPressed: onTap,
-        icon: const Icon(Icons.chat_bubble_outline, size: 18),
+        icon: Icon(Icons.chat_bubble_outline, size: 18),
         label: const Text('Start'),
       ),
     );

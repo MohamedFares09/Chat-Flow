@@ -23,14 +23,14 @@ class RegisterTopBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
               color: AppColors.accent,
               size: 20,
             ),
           ),
           const SizedBox(width: 4),
-          const Text(
+           Text(
             'ChatFlow',
             style: TextStyle(
               color: AppColors.accent,
@@ -40,7 +40,7 @@ class RegisterTopBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Icon(
+          Icon(
             Icons.info_outline,
             color: AppColors.body,
             size: 20,

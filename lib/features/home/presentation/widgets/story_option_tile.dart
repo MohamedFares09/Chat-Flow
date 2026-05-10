@@ -25,14 +25,14 @@ class StoryOptionTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.title,
           fontWeight: FontWeight.w700,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: const TextStyle(color: AppColors.body),
+        style: TextStyle(color: AppColors.body),
       ),
       onTap: onTap,
     );

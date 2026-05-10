@@ -53,7 +53,7 @@ class _SettingsEditProfileSheetState extends State<SettingsEditProfileSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
+                 Text(
                   'Edit Profile',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -89,7 +89,7 @@ class _SettingsEditProfileSheetState extends State<SettingsEditProfileSheet> {
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
                           ),
-                          icon: const Icon(Icons.photo_camera_outlined),
+                          icon: Icon(Icons.photo_camera_outlined),
                         ),
                       ),
                     ],
@@ -105,7 +105,7 @@ class _SettingsEditProfileSheetState extends State<SettingsEditProfileSheet> {
                     filled: true,
                     fillColor: AppColors.input,
                     hintText: 'Username',
-                    prefixIcon: const Icon(
+                    prefixIcon: Icon(
                       Icons.person_outline,
                       color: AppColors.body,
                     ),
@@ -115,7 +115,7 @@ class _SettingsEditProfileSheetState extends State<SettingsEditProfileSheet> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.accent),
+                      borderSide: BorderSide(color: AppColors.accent),
                     ),
                   ),
                 ),

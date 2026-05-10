@@ -48,7 +48,7 @@ class HomeStoryItem extends StatelessWidget {
                       : null,
                   gradient: isAddStory || isSeen
                       ? null
-                      : const LinearGradient(
+                      : LinearGradient(
                           colors: [AppColors.accent, Color(0xffcdbdff)],
                         ),
                 ),
@@ -63,7 +63,7 @@ class HomeStoryItem extends StatelessWidget {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Icon(Icons.add, color: AppColors.accent),
+                            : Icon(Icons.add, color: AppColors.accent),
                       )
                     : HomeUserAvatar(
                         name: name,
@@ -86,7 +86,7 @@ class HomeStoryItem extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.scaffold, width: 2),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.add,
                         color: Colors.white,
                         size: 16,

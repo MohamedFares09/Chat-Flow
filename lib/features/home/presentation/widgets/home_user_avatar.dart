@@ -31,7 +31,7 @@ class HomeUserAvatar extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: backgroundColor == null
-                ? const LinearGradient(
+                ? LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [AppColors.primary, Color(0xff5203d5)],

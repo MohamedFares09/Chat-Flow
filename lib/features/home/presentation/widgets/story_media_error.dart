@@ -15,7 +15,7 @@ class StoryMediaError extends StatelessWidget {
       child: Text(
         message,
         textAlign: TextAlign.center,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.title,
           fontSize: 18,
           fontWeight: FontWeight.w700,

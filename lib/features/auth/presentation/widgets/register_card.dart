@@ -56,7 +56,7 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'FULL NAME',
               hintText: 'Alex Rivers',
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.person_outline,
                 color: AppColors.body,
                 size: 18,
@@ -67,7 +67,7 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'EMAIL ADDRESS',
               hintText: 'alex@chatflow.io',
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.alternate_email,
                 color: AppColors.body,
                 size: 18,
@@ -80,7 +80,7 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'PASSWORD',
               hintText: 'Password',
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.lock_outline,
                 color: AppColors.body,
                 size: 18,
@@ -93,7 +93,7 @@ class RegisterCard extends StatelessWidget {
             RegisterLabeledField(
               label: 'CONFIRM PASSWORD',
               hintText: 'Confirm password',
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.shield_outlined,
                 color: AppColors.body,
                 size: 18,

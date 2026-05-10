@@ -28,7 +28,7 @@ class MessageUserAvatar extends StatelessWidget {
           child: imageUrl == null || imageUrl.isEmpty
               ? Text(
                   _initials,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),

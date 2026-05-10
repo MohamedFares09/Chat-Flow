@@ -19,7 +19,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       (failure) => emit(SettingsErrorState(failure.message)),
       (user) {
         currentUser = user;
-        emit(SettingsUpdateSuccessState(user));
+        emit(SettingsSuccessState(user));
       },
     );
   }
@@ -37,7 +37,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       (failure) => emit(SettingsErrorState(failure.message)),
       (user) {
         currentUser = user;
-        emit(SettingsSuccessState(user));
+        emit(SettingsUpdateSuccessState(user));
       },
     );
   }

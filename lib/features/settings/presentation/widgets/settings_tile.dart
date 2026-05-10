@@ -7,6 +7,7 @@ class SettingsTile extends StatefulWidget {
     required this.title,
     this.hasSwitch = false,
     this.switchValue = false,
+    this.onSwitchChanged,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class SettingsTile extends StatefulWidget {
   final String title;
   final bool hasSwitch;
   final bool switchValue;
+  final ValueChanged<bool>? onSwitchChanged;
 
   @override
   State<SettingsTile> createState() => _SettingsTileState();
@@ -26,6 +28,14 @@ class _SettingsTileState extends State<SettingsTile> {
   void initState() {
     super.initState();
     value = widget.switchValue;
+  }
+
+  @override
+  void didUpdateWidget(covariant SettingsTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.switchValue != widget.switchValue) {
+      value = widget.switchValue;
+    }
   }
 
   @override
@@ -43,7 +53,7 @@ class _SettingsTileState extends State<SettingsTile> {
                 widget.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.title,
                   fontSize: 16,
                   height: 1.5,
@@ -60,10 +70,11 @@ class _SettingsTileState extends State<SettingsTile> {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 onChanged: (newValue) {
                   setState(() => value = newValue);
+                  widget.onSwitchChanged?.call(newValue);
                 },
               )
             else
-              const Icon(
+              Icon(
                 Icons.chevron_right,
                 color: AppColors.body,
                 size: 22,

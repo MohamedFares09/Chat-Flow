@@ -30,7 +30,7 @@ class MessageHeader extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back, color: AppColors.accent),
+            icon: Icon(Icons.arrow_back, color: AppColors.accent),
           ),
           MessageUserAvatar(
             name: conversation.otherUser.name,
@@ -47,7 +47,7 @@ class MessageHeader extends StatelessWidget {
                   conversation.otherUser.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.title,
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -71,11 +71,11 @@ class MessageHeader extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.videocam_outlined, color: AppColors.accent),
+            icon: Icon(Icons.videocam_outlined, color: AppColors.accent),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.call_outlined, color: AppColors.accent),
+            icon: Icon(Icons.call_outlined, color: AppColors.accent),
           ),
         ],
       ),

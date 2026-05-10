@@ -37,7 +37,7 @@ class ImageStoryContent extends StatelessWidget {
             child: Text(
               story.content,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,

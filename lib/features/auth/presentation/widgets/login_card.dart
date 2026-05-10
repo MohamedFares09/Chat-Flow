@@ -66,7 +66,7 @@ class LoginCard extends StatelessWidget {
                     color: AppColors.primary,
                   );
                 },
-                child: const Text(
+                child:  Text(
                   'Forgot Password?',
                   style: TextStyle(
                     color: AppColors.accent,
@@ -92,12 +92,12 @@ class LoginCard extends StatelessWidget {
               },
               style: OutlinedButton.styleFrom(
                 fixedSize: const Size.fromHeight(56),
-                side: const BorderSide(color: AppColors.mutedBorder),
+                side: BorderSide(color: AppColors.mutedBorder),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Row(
+              child:  Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(

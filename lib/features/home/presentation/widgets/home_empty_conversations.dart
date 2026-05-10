@@ -14,7 +14,7 @@ class HomeEmptyConversations extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.border),
       ),
-      child: const Column(
+      child: Column(
         children: [
           Icon(
             Icons.chat_bubble_outline,

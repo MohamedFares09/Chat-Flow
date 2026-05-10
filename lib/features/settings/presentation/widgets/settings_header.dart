@@ -34,7 +34,7 @@ class SettingsHeader extends StatelessWidget {
             size: 32,
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Text(
               'ChatFlow',
               style: TextStyle(
@@ -47,7 +47,7 @@ class SettingsHeader extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.search, color: AppColors.body, size: 22),
+            icon: Icon(Icons.search, color: AppColors.body, size: 22),
           ),
         ],
       ),

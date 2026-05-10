@@ -33,7 +33,7 @@ class LoginHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        const Text(
+         Text(
           'ChatFlow',
           style: TextStyle(
             color: AppColors.title,
@@ -43,7 +43,7 @@ class LoginHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
+         Text(
           'Securely connect with your team and\nfriends across the globe.',
           textAlign: TextAlign.center,
           style: TextStyle(

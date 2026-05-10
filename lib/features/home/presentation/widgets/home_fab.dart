@@ -31,7 +31,7 @@ class HomeFab extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.add_a_photo_outlined, color: Colors.white),
+          child: Icon(Icons.add_a_photo_outlined, color: Colors.white),
         ),
       ),
     );

@@ -14,7 +14,7 @@ class DateChip extends StatelessWidget {
           color: AppColors.input.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(999),
         ),
-        child: const Text(
+        child:  Text(
           'Today',
           style: TextStyle(
             color: AppColors.body,

@@ -24,13 +24,13 @@ class HomeTopSearchField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       onSubmitted: (_) => onSearch(),
       cursorColor: AppColors.accent,
-      style: const TextStyle(color: AppColors.title, fontSize: 16),
+      style: TextStyle(color: AppColors.title, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.input,
         hintText: 'Search email',
-        hintStyle: const TextStyle(color: AppColors.body),
-        prefixIcon: const Icon(Icons.search, color: AppColors.body),
+        hintStyle: TextStyle(color: AppColors.body),
+        prefixIcon: Icon(Icons.search, color: AppColors.body),
         suffixIcon: isLoading
             ? const Padding(
                 padding: EdgeInsets.all(14),
@@ -45,28 +45,28 @@ class HomeTopSearchField extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: onSearch,
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_forward,
                       color: AppColors.accent,
                     ),
                   ),
                   IconButton(
                     onPressed: onClear,
-                    icon: const Icon(Icons.close, color: AppColors.body),
+                    icon: Icon(Icons.close, color: AppColors.body),
                   ),
                 ],
               ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.accent),
+          borderSide: BorderSide(color: AppColors.accent),
         ),
       ),
     );

@@ -21,7 +21,7 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.accent,
               fontSize: 12,
               fontWeight: FontWeight.w700,

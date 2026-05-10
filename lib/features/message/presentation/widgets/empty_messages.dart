@@ -9,7 +9,7 @@ class EmptyMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-      children: const [
+      children:  [
         DateChip(),
         SizedBox(height: 120),
         Icon(

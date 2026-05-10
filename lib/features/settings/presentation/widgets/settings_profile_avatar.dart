@@ -25,7 +25,7 @@ class SettingsProfileAvatar extends StatelessWidget {
           width: size,
           height: size,
           padding: EdgeInsets.all(size * 0.06),
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               begin: Alignment.topLeft,

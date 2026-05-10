@@ -43,7 +43,7 @@ class HomeChatTile extends StatelessWidget {
                         child: Text(
                           conversation.otherUser.name,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.title,
                             fontSize: 16,
                             height: 1.5,
@@ -72,7 +72,7 @@ class HomeChatTile extends StatelessWidget {
                               ? 'No messages yet.'
                               : conversation.lastMessage,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.body,
                             fontSize: 16,
                             height: 1.5,
@@ -92,7 +92,7 @@ class HomeChatTile extends StatelessWidget {
                           ),
                           child: Text(
                             '${conversation.unreadCount}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,

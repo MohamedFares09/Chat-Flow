@@ -31,7 +31,7 @@ class RegisterLabeledField extends StatelessWidget {
           padding: const EdgeInsets.only(left: 4),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.accent,
               fontSize: 12,
               fontWeight: FontWeight.w700,

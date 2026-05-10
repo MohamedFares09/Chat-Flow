@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_codex/core/cubits/theme/theme_cubit.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/core/utils/route_names.dart';
 import 'package:test_codex/core/widgets/app_background.dart';
@@ -24,6 +25,7 @@ class SettingsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state.isDark;
     return AppBackground(
       useRegisterColor: true,
       child: SafeArea(
@@ -62,16 +64,19 @@ class SettingsViewBody extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        const SettingsSection(
+                        SettingsSection(
                           title: 'Appearance',
                           tiles: [
                             SettingsTile(
                               icon: Icons.dark_mode_outlined,
                               title: 'Dark Mode',
                               hasSwitch: true,
-                              switchValue: true,
+                              switchValue: isDark,
+                              onSwitchChanged: (value) => context
+                                  .read<ThemeCubit>()
+                                  .changeTheme(isDark: value),
                             ),
-                            SettingsTile(
+                            const SettingsTile(
                               icon: Icons.wallpaper_outlined,
                               title: 'Chat Wallpaper',
                             ),

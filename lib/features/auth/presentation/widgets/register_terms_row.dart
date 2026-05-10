@@ -22,7 +22,7 @@ class RegisterTermsRow extends StatelessWidget {
           child: Checkbox(
             value: agreedToTerms,
             onChanged: onChanged,
-            side: const BorderSide(color: Color(0xff414754)),
+            side: BorderSide(color: Color(0xff414754)),
             activeColor: AppColors.primary,
             checkColor: Colors.white,
           ),
@@ -31,7 +31,7 @@ class RegisterTermsRow extends StatelessWidget {
         Expanded(
           child: RichText(
             text: TextSpan(
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.body,
                 fontSize: 14,
                 height: 1.43,
@@ -53,7 +53,7 @@ class RegisterTermsRow extends StatelessWidget {
   TextSpan _linkSpan(String text) {
     return TextSpan(
       text: text,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.accent,
         fontWeight: FontWeight.w700,
         decoration: TextDecoration.underline,

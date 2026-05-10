@@ -50,7 +50,7 @@ class StoryHeader extends StatelessWidget {
                   story.userName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -59,7 +59,7 @@ class StoryHeader extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onClose,
-                icon: const Icon(Icons.close, color: Colors.white),
+                icon: Icon(Icons.close, color: Colors.white),
               ),
             ],
           ),

@@ -39,7 +39,7 @@ class RegisterAvatarUpload extends StatelessWidget {
                     ColoredBox(
                       color: AppColors.scaffold.withValues(alpha: 0.4),
                     ),
-                    const Center(
+                     Center(
                       child: Icon(
                         Icons.photo_camera_outlined,
                         color: AppColors.accent,
@@ -66,7 +66,7 @@ class RegisterAvatarUpload extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        const Text(
+         Text(
           'UPLOAD PHOTO',
           style: TextStyle(
             color: AppColors.body,

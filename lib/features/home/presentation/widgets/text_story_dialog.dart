@@ -24,7 +24,7 @@ class _TextStoryDialogState extends State<TextStoryDialog> {
     return AlertDialog(
       backgroundColor: AppColors.scaffold,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      title: const Text(
+      title:  Text(
         'Text Story',
         style: TextStyle(color: AppColors.title),
       ),
@@ -33,8 +33,8 @@ class _TextStoryDialogState extends State<TextStoryDialog> {
         autofocus: true,
         maxLines: 4,
         maxLength: 180,
-        style: const TextStyle(color: AppColors.title),
-        decoration: const InputDecoration(
+        style: TextStyle(color: AppColors.title),
+        decoration:  InputDecoration(
           hintText: 'Write your story...',
           hintStyle: TextStyle(color: AppColors.hint),
           enabledBorder: OutlineInputBorder(

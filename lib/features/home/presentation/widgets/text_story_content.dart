@@ -25,7 +25,7 @@ class TextStoryContent extends StatelessWidget {
         child: Text(
           story.content,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontSize: 28,
             fontWeight: FontWeight.w700,

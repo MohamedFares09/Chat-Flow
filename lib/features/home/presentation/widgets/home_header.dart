@@ -44,7 +44,7 @@ class _HomeHeaderState extends State<HomeHeader> {
           if (!isSearching) ...[
             const HomeUserAvatar(name: 'You', size: 40, showOnlineDot: true),
             const Spacer(),
-            const Text(
+             Text(
               'ChatFlow',
               style: TextStyle(
                 color: AppColors.accent,
@@ -58,10 +58,10 @@ class _HomeHeaderState extends State<HomeHeader> {
               onPressed: () {
                 setState(() => isSearching = true);
               },
-              icon: const Icon(Icons.search, color: AppColors.body, size: 22),
+              icon: Icon(Icons.search, color: AppColors.body, size: 22),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.more_vert, color: AppColors.body, size: 22),
+            Icon(Icons.more_vert, color: AppColors.body, size: 22),
           ] else ...[
             Expanded(
               child: HomeTopSearchField(

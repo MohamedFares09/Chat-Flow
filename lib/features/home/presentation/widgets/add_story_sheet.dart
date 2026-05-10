@@ -14,7 +14,7 @@ class AddStorySheet extends StatelessWidget {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           color: AppColors.scaffold,
           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
         ),
@@ -22,7 +22,7 @@ class AddStorySheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+             Text(
               'Create story',
               style: TextStyle(
                 color: AppColors.title,

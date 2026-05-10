@@ -48,7 +48,7 @@ class SettingsProfileCard extends StatelessWidget {
             name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.title,
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -60,7 +60,7 @@ class SettingsProfileCard extends StatelessWidget {
             email,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.body,
               fontSize: 14,
               height: 1.4,

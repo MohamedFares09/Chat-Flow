@@ -30,7 +30,7 @@ class MessageBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, bottom: 4),
                 child: Text(
                   receiverName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color(0xffcdbdff),
                     fontSize: 11,
                     height: 1.5,
@@ -42,7 +42,7 @@ class MessageBubble extends StatelessWidget {
               decoration: BoxDecoration(
                 color: message.isMine ? null : const Color(0xff1d2027),
                 gradient: message.isMine
-                    ? const LinearGradient(
+                    ? LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [AppColors.primary, AppColors.purple],
@@ -69,7 +69,7 @@ class MessageBubble extends StatelessWidget {
                 children: [
                   Text(
                     message.text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                       height: 1.47,

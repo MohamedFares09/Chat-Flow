@@ -10,7 +10,7 @@ class RegisterFooter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+         Text(
           'Already have an account? ',
           style: TextStyle(
             color: AppColors.body,
@@ -20,7 +20,7 @@ class RegisterFooter extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () => Navigator.pushReplacementNamed(context, LoginView.route),
-          child: const Text(
+          child:  Text(
             'Log In',
             style: TextStyle(
               color: AppColors.accent,
