@@ -28,19 +28,20 @@ class HomeFirestoreService {
         .collection('conversations')
         .where('participantIds', arrayContains: currentUserId)
         .snapshots()
-        .map(
-          (snapshot) => _sortConversations(
-            snapshot.docs
-                .map(
-                  (doc) => ConversationModel.fromFirestore(
-                    id: doc.id,
-                    currentUserId: currentUserId,
-                    json: doc.data(),
-                  ),
-                )
-                .toList(),
-          ),
-        );
+        .map((snapshot) {
+      unawaited(_markIncomingMessagesAsDelivered(snapshot.docs));
+      return _sortConversations(
+        snapshot.docs
+            .map(
+              (doc) => ConversationModel.fromFirestore(
+                id: doc.id,
+                currentUserId: currentUserId,
+                json: doc.data(),
+              ),
+            )
+            .toList(),
+      );
+    });
   }
 
   Future<List<ConversationModel>> getConversations() async {
@@ -50,6 +51,7 @@ class HomeFirestoreService {
         .where('participantIds', arrayContains: currentUserId)
         .get();
 
+    unawaited(_markIncomingMessagesAsDelivered(snapshot.docs));
     return _sortConversations(
       snapshot.docs
           .map(
@@ -61,6 +63,37 @@ class HomeFirestoreService {
           )
           .toList(),
     );
+  }
+
+  Future<void> _markIncomingMessagesAsDelivered(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> conversations,
+  ) async {
+    final currentUserId = _currentUserId;
+    for (final conversation in conversations) {
+      final messages = await conversation.reference
+          .collection('messages')
+          .where('receiverId', isEqualTo: currentUserId)
+          .where('status', isEqualTo: 'sent')
+          .get();
+      final legacyMessages = await conversation.reference
+          .collection('messages')
+          .where('receiverId', isEqualTo: currentUserId)
+          .where('status', isNull: true)
+          .get();
+      final deliveredMessages = [
+        ...messages.docs,
+        ...legacyMessages.docs,
+      ];
+      if (deliveredMessages.isEmpty) {
+        continue;
+      }
+
+      final batch = firestore.batch();
+      for (final message in deliveredMessages) {
+        batch.update(message.reference, {'status': 'delivered'});
+      }
+      await batch.commit();
+    }
   }
 
   List<ConversationModel> _sortConversations(

@@ -72,11 +72,13 @@ class MessageFirestoreService {
         conversationData['onlineUsers'] ?? [],
       );
       final receiverIsOnline = onlineUsers.contains(receiverId);
+      final messageStatus = receiverIsOnline ? 'read' : 'sent';
 
       transaction.set(messageRef, {
         'text': messageText,
         'senderId': currentUserId,
         'receiverId': receiverId,
+        'status': messageStatus,
         'createdAt': FieldValue.serverTimestamp(),
       });
       transaction.update(
@@ -96,6 +98,7 @@ class MessageFirestoreService {
     await firestore.collection('conversations').doc(conversationId).update({
       'unreadCounts.$_currentUserId': 0,
     });
+    await _markIncomingMessagesAsRead(conversationId);
   }
 
   Future<void> updateConversationPresence({
@@ -109,6 +112,39 @@ class MessageFirestoreService {
           : FieldValue.arrayRemove([currentUserId]),
       'unreadCounts.$currentUserId': 0,
     });
+    if (isOnline) {
+      await _markIncomingMessagesAsRead(conversationId);
+    }
+  }
+
+  Future<void> _markIncomingMessagesAsRead(String conversationId) async {
+    final snapshot = await firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .where('receiverId', isEqualTo: _currentUserId)
+        .where('status', whereIn: ['sent', 'delivered'])
+        .get();
+    final legacySnapshot = await firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .where('receiverId', isEqualTo: _currentUserId)
+        .where('status', isNull: true)
+        .get();
+    final unreadMessages = [
+      ...snapshot.docs,
+      ...legacySnapshot.docs,
+    ];
+    if (unreadMessages.isEmpty) {
+      return;
+    }
+
+    final batch = firestore.batch();
+    for (final doc in unreadMessages) {
+      batch.update(doc.reference, {'status': 'read'});
+    }
+    await batch.commit();
   }
 
   String get _currentUserId {

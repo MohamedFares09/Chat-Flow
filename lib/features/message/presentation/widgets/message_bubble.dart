@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
+import 'package:test_codex/features/message/domain/entities/message_status.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -92,8 +93,8 @@ class MessageBubble extends StatelessWidget {
                       if (message.isMine) ...[
                         const SizedBox(width: 4),
                         Icon(
-                          Icons.done_all,
-                          color: Colors.white.withValues(alpha: 0.75),
+                          _statusIcon,
+                          color: _statusColor,
                           size: 14,
                         ),
                       ],
@@ -116,5 +117,21 @@ class MessageBubble extends StatelessWidget {
     final minute = message.createdAt.minute.toString().padLeft(2, '0');
     final period = message.createdAt.hour >= 12 ? 'PM' : 'AM';
     return '$safeHour:$minute $period';
+  }
+
+  IconData get _statusIcon {
+    return switch (message.status) {
+      MessageStatus.sent => Icons.done,
+      MessageStatus.delivered => Icons.done_all,
+      MessageStatus.read => Icons.done_all,
+    };
+  }
+
+  Color get _statusColor {
+    return switch (message.status) {
+      MessageStatus.read => const Color(0xff60a5fa),
+      MessageStatus.sent => const Color(0xffd1d5db),
+      MessageStatus.delivered => const Color(0xffd1d5db),
+    };
   }
 }
