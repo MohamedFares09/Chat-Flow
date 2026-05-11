@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_duration_label.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 import 'package:video_player/video_player.dart';
 
 class FullScreenVideoView extends StatefulWidget {
@@ -15,34 +18,28 @@ class FullScreenVideoView extends StatefulWidget {
 }
 
 class _FullScreenVideoViewState extends State<FullScreenVideoView> {
-  late final VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isReady = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..addListener(_onVideoChanged)
-      ..initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() => _isReady = true);
-      });
+    _loadVideo();
   }
 
   @override
   void dispose() {
     _controller
-      ..removeListener(_onVideoChanged)
+      ?..removeListener(_onVideoChanged)
       ..dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final position = _controller.value.position;
-    final duration = _controller.value.duration;
+    final controller = _controller;
+    final position = controller?.value.position ?? Duration.zero;
+    final duration = controller?.value.duration ?? Duration.zero;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -57,8 +54,8 @@ class _FullScreenVideoViewState extends State<FullScreenVideoView> {
             child: Center(
               child: _isReady
                   ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
+                      aspectRatio: controller!.value.aspectRatio,
+                      child: VideoPlayer(controller),
                     )
                   : const CircularProgressIndicator(),
             ),
@@ -74,7 +71,7 @@ class _FullScreenVideoViewState extends State<FullScreenVideoView> {
                     max: _sliderMax(duration),
                     onChanged: _isReady
                         ? (value) {
-                            _controller.seekTo(
+                            controller?.seekTo(
                               Duration(milliseconds: value.round()),
                             );
                           }
@@ -107,7 +104,7 @@ class _FullScreenVideoViewState extends State<FullScreenVideoView> {
                         onPressed: _isReady ? _togglePlayback : null,
                         iconSize: 34,
                         icon: Icon(
-                          _controller.value.isPlaying
+                          controller?.value.isPlaying == true
                               ? Icons.pause
                               : Icons.play_arrow,
                         ),
@@ -146,29 +143,67 @@ class _FullScreenVideoViewState extends State<FullScreenVideoView> {
   }
 
   void _togglePlayback() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
+    final controller = _controller;
+    if (controller == null) {
+      return;
+    }
+
+    if (controller.value.isPlaying) {
+      controller.pause();
     } else {
-      _controller.play();
+      controller.play();
     }
     setState(() {});
   }
 
   void _seekBy(int seconds) {
-    final duration = _controller.value.duration;
-    final nextPosition = _controller.value.position + Duration(seconds: seconds);
+    final controller = _controller;
+    if (controller == null) {
+      return;
+    }
+
+    final duration = controller.value.duration;
+    final nextPosition = controller.value.position + Duration(seconds: seconds);
     final safePosition = Duration(
       milliseconds: nextPosition.inMilliseconds.clamp(
         0,
         duration.inMilliseconds,
       ),
     );
-    _controller.seekTo(safePosition);
+    controller.seekTo(safePosition);
   }
 
   void _onVideoChanged() {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  Future<void> _loadVideo() async {
+    final fileInfo = await MessageMediaCache.instance.getFileFromCache(
+      widget.videoUrl,
+    );
+    final File videoFile;
+    if (fileInfo != null) {
+      videoFile = fileInfo.file;
+    } else {
+      videoFile = await MessageMediaCache.instance.getSingleFile(
+        widget.videoUrl,
+      );
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    final controller = VideoPlayerController.file(videoFile)
+      ..addListener(_onVideoChanged);
+    _controller = controller;
+    await controller.initialize();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() => _isReady = true);
   }
 }

@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:test_codex/features/message/presentation/widgets/full_screen_image_view.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 
 class MessageImageContent extends StatelessWidget {
   const MessageImageContent({
@@ -23,23 +25,20 @@ class MessageImageContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: Stack(
             children: [
-              Image.network(
-                imageUrl,
+              CachedNetworkImage(
+                imageUrl: imageUrl,
+                cacheManager: MessageMediaCache.instance,
                 width: 190,
                 height: 210,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-
+                placeholder: (context, url) {
                   return const SizedBox(
                     width: 190,
                     height: 210,
                     child: Center(child: CircularProgressIndicator()),
                   );
                 },
-                errorBuilder: (context, error, stackTrace) {
+                errorWidget: (context, url, error) {
                   return const SizedBox(
                     width: 190,
                     height: 140,

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:test_codex/features/message/presentation/widgets/full_screen_video_view.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_duration_label.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 import 'package:video_player/video_player.dart';
 
 class MessageVideoContent extends StatefulWidget {
@@ -18,29 +21,24 @@ class MessageVideoContent extends StatefulWidget {
 }
 
 class _MessageVideoContentState extends State<MessageVideoContent> {
-  late final VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isReady = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() => _isReady = true);
-      });
+    _loadVideo();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = _controller;
     return GestureDetector(
       onTap: () => _openFullScreenVideo(context),
       child: ClipRRect(
@@ -56,9 +54,9 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
                     ? FittedBox(
                         fit: BoxFit.cover,
                         child: SizedBox(
-                          width: _controller.value.size.width,
-                          height: _controller.value.size.height,
-                          child: VideoPlayer(_controller),
+                          width: controller!.value.size.width,
+                          height: controller.value.size.height,
+                          child: VideoPlayer(controller),
                         ),
                       )
                     : const ColoredBox(color: Color(0xff111827)),
@@ -73,7 +71,7 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
                   color: Colors.white,
                   iconSize: 34,
                   icon: Icon(
-                    _controller.value.isPlaying
+                    controller?.value.isPlaying == true
                         ? Icons.pause
                         : Icons.play_arrow,
                   ),
@@ -92,7 +90,9 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      MessageDurationLabel.format(_controller.value.duration),
+                      MessageDurationLabel.format(
+                        controller?.value.duration ?? Duration.zero,
+                      ),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -137,10 +137,15 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
   }
 
   void _togglePlayback() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
+    final controller = _controller;
+    if (controller == null) {
+      return;
+    }
+
+    if (controller.value.isPlaying) {
+      controller.pause();
     } else {
-      _controller.play();
+      controller.play();
     }
     setState(() {});
   }
@@ -151,5 +156,32 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
         builder: (_) => FullScreenVideoView(videoUrl: widget.videoUrl),
       ),
     );
+  }
+
+  Future<void> _loadVideo() async {
+    final fileInfo = await MessageMediaCache.instance.getFileFromCache(
+      widget.videoUrl,
+    );
+    final File videoFile;
+    if (fileInfo != null) {
+      videoFile = fileInfo.file;
+    } else {
+      videoFile = await MessageMediaCache.instance.getSingleFile(
+        widget.videoUrl,
+      );
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    final controller = VideoPlayerController.file(videoFile);
+    _controller = controller;
+    await controller.initialize();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() => _isReady = true);
   }
 }

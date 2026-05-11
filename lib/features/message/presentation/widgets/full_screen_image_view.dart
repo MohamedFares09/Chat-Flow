@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 
 class FullScreenImageView extends StatelessWidget {
   const FullScreenImageView({
@@ -25,17 +27,14 @@ class FullScreenImageView extends StatelessWidget {
           child: InteractiveViewer(
             minScale: 0.8,
             maxScale: 4,
-            child: Image.network(
-              imageUrl,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              cacheManager: MessageMediaCache.instance,
               fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-
+              placeholder: (context, url) {
                 return const Center(child: CircularProgressIndicator());
               },
-              errorBuilder: (context, error, stackTrace) {
+              errorWidget: (context, url, error) {
                 return const Icon(
                   Icons.broken_image_outlined,
                   color: Colors.white,
