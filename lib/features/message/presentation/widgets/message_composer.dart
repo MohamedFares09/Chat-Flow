@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/features/message/presentation/widgets/voice_record_button.dart';
 
 class MessageComposer extends StatelessWidget {
   const MessageComposer({
     required this.controller,
     required this.isSending,
     required this.onSend,
+    required this.onAttachTap,
+    required this.onCameraTap,
+    required this.onVoiceRecorded,
     super.key,
   });
 
   final TextEditingController controller;
   final bool isSending;
   final VoidCallback onSend;
+  final VoidCallback onAttachTap;
+  final VoidCallback onCameraTap;
+  final ValueChanged<String> onVoiceRecorded;
 
   @override
   Widget build(BuildContext context) {
@@ -66,18 +73,22 @@ class MessageComposer extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: isSending ? null : onAttachTap,
                     icon: Icon(
                       Icons.attach_file,
                       color: AppColors.body,
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: isSending ? null : onCameraTap,
                     icon: Icon(
                       Icons.camera_alt_outlined,
                       color: AppColors.body,
                     ),
+                  ),
+                  VoiceRecordButton(
+                    isSending: isSending,
+                    onVoiceRecorded: onVoiceRecorded,
                   ),
                 ],
               ),

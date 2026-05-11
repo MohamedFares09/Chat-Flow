@@ -72,6 +72,7 @@ void setupGetIt() {
       () => MessageFirestoreService(
         firestore: getIt<FirebaseFirestore>(),
         firebaseAuth: getIt<FirebaseAuth>(),
+        firebaseStorage: getIt<FirebaseStorage>(),
       ),
     );
   }

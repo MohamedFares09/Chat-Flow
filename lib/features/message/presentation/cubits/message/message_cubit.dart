@@ -74,6 +74,27 @@ class MessageCubit extends Cubit<MessageState> {
     );
   }
 
+  Future<void> sendMediaMessage({
+    required String conversationId,
+    required String receiverId,
+    required String filePath,
+    required String type,
+    String text = '',
+  }) async {
+    emit(MessageSendLoadingState(messages));
+    final result = await messageRepo.sendMediaMessage(
+      conversationId: conversationId,
+      receiverId: receiverId,
+      filePath: filePath,
+      type: type,
+      text: text,
+    );
+    result.fold(
+      (failure) => emit(MessageErrorState(failure.message)),
+      (_) => emit(MessageSentState(messages)),
+    );
+  }
+
   Future<void> markConversationAsRead(String conversationId) async {
     await messageRepo.markConversationAsRead(conversationId);
   }

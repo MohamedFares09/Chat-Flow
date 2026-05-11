@@ -14,6 +14,14 @@ abstract class MessageRepo {
     required String text,
   });
 
+  Future<Either<Failure, Unit>> sendMediaMessage({
+    required String conversationId,
+    required String receiverId,
+    required String filePath,
+    required String type,
+    String text,
+  });
+
   Future<Either<Failure, Unit>> markConversationAsRead(String conversationId);
 
   Future<Either<Failure, Unit>> updateConversationPresence({

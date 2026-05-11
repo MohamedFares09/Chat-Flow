@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/entities/message_status.dart';
+import 'package:test_codex/features/message/domain/entities/message_type.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_image_content.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_video_content.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_voice_content.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -39,7 +43,7 @@ class MessageBubble extends StatelessWidget {
                 ),
               ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: _bubblePadding,
               decoration: BoxDecoration(
                 color: message.isMine ? null : const Color(0xff1d2027),
                 gradient: message.isMine
@@ -68,38 +72,36 @@ class MessageBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    message.text,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      height: 1.47,
-                    ),
+                  _MessageContent(
+                    message: message,
+                    timeLabel: _timeLabel,
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _timeLabel,
-                        style: TextStyle(
-                          color: message.isMine
-                              ? Colors.white.withValues(alpha: 0.7)
-                              : AppColors.body.withValues(alpha: 0.6),
-                          fontSize: 10,
-                          height: 1.5,
+                  if (!_hasOverlayMeta) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _timeLabel,
+                          style: TextStyle(
+                            color: message.isMine
+                                ? Colors.white.withValues(alpha: 0.7)
+                                : AppColors.body.withValues(alpha: 0.6),
+                            fontSize: 10,
+                            height: 1.5,
+                          ),
                         ),
-                      ),
-                      if (message.isMine) ...[
-                        const SizedBox(width: 4),
-                        Icon(
-                          _statusIcon,
-                          color: _statusColor,
-                          size: 14,
-                        ),
+                        if (message.isMine) ...[
+                          const SizedBox(width: 4),
+                          Icon(
+                            _statusIcon,
+                            color: _statusColor,
+                            size: 14,
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -132,6 +134,57 @@ class MessageBubble extends StatelessWidget {
       MessageStatus.read => const Color(0xff60a5fa),
       MessageStatus.sent => const Color(0xffd1d5db),
       MessageStatus.delivered => const Color(0xffd1d5db),
+    };
+  }
+
+  EdgeInsets get _bubblePadding {
+    return switch (message.type) {
+      MessageType.image => const EdgeInsets.all(4),
+      MessageType.video => const EdgeInsets.all(4),
+      _ => const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    };
+  }
+
+  bool get _hasOverlayMeta {
+    return message.type == MessageType.image ||
+        message.type == MessageType.video;
+  }
+}
+
+class _MessageContent extends StatelessWidget {
+  const _MessageContent({
+    required this.message,
+    required this.timeLabel,
+  });
+
+  final MessageEntity message;
+  final String timeLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaUrl = message.mediaUrl;
+    return switch (message.type) {
+      MessageType.image when mediaUrl != null =>
+        MessageImageContent(
+          imageUrl: mediaUrl,
+          heroTag: 'message-image-${message.id}',
+          timeLabel: timeLabel,
+        ),
+      MessageType.video when mediaUrl != null =>
+        MessageVideoContent(
+          videoUrl: mediaUrl,
+          timeLabel: timeLabel,
+        ),
+      MessageType.voice when mediaUrl != null =>
+        MessageVoiceContent(voiceUrl: mediaUrl),
+      _ => Text(
+          message.text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            height: 1.47,
+          ),
+        ),
     };
   }
 }

@@ -24,6 +24,12 @@
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Chat Flow needs camera access to send photos in chats.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Chat Flow needs microphone access to record voice messages.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Chat Flow needs photo library access to send images and videos.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

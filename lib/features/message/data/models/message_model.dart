@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/entities/message_status.dart';
+import 'package:test_codex/features/message/domain/entities/message_type.dart';
 
 class MessageModel extends MessageEntity {
   const MessageModel({
@@ -10,6 +11,8 @@ class MessageModel extends MessageEntity {
     required super.createdAt,
     required super.isMine,
     required super.status,
+    required super.type,
+    super.mediaUrl,
   });
 
   factory MessageModel.fromFirestore({
@@ -25,6 +28,8 @@ class MessageModel extends MessageEntity {
       createdAt: createdAt is Timestamp ? createdAt.toDate() : DateTime.now(),
       isMine: json['senderId'] == currentUserId,
       status: _statusFromJson(json['status']),
+      type: _typeFromJson(json['type']),
+      mediaUrl: json['mediaUrl'] is String ? json['mediaUrl'] : null,
     );
   }
 
@@ -33,6 +38,15 @@ class MessageModel extends MessageEntity {
       'read' => MessageStatus.read,
       'delivered' => MessageStatus.delivered,
       _ => MessageStatus.sent,
+    };
+  }
+
+  static MessageType _typeFromJson(dynamic value) {
+    return switch (value) {
+      'image' => MessageType.image,
+      'video' => MessageType.video,
+      'voice' => MessageType.voice,
+      _ => MessageType.text,
     };
   }
 }

@@ -45,6 +45,31 @@ class MessageRepoImpl extends MessageRepo {
   }
 
   @override
+  Future<Either<Failure, Unit>> sendMediaMessage({
+    required String conversationId,
+    required String receiverId,
+    required String filePath,
+    required String type,
+    String text = '',
+  }) async {
+    try {
+      await messageFirestoreService.sendMediaMessage(
+        conversationId: conversationId,
+        receiverId: receiverId,
+        filePath: filePath,
+        type: type,
+        text: text,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception MessageRepoImpl - sendMediaMessage: $e');
+      return left(const ServerFailure('Something went wrong. Please try again.'));
+    }
+  }
+
+  @override
   Future<Either<Failure, Unit>> markConversationAsRead(
     String conversationId,
   ) async {
