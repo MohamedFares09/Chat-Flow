@@ -52,4 +52,23 @@ class MessageRepoImpl extends MessageRepo {
       return left(const ServerFailure('Something went wrong. Please try again.'));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> updateConversationPresence({
+    required String conversationId,
+    required bool isOnline,
+  }) async {
+    try {
+      await messageFirestoreService.updateConversationPresence(
+        conversationId: conversationId,
+        isOnline: isOnline,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception MessageRepoImpl - updateConversationPresence: $e');
+      return left(const ServerFailure('Something went wrong. Please try again.'));
+    }
+  }
 }

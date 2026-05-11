@@ -12,4 +12,9 @@ abstract class MessageRepo {
   });
 
   Future<Either<Failure, Unit>> markConversationAsRead(String conversationId);
+
+  Future<Either<Failure, Unit>> updateConversationPresence({
+    required String conversationId,
+    required bool isOnline,
+  });
 }

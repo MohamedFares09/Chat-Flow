@@ -10,9 +10,15 @@ class MessageCubit extends Cubit<MessageState> {
   final MessageRepo messageRepo;
   StreamSubscription<List<MessageEntity>>? _messagesSubscription;
   List<MessageEntity> messages = [];
+  String? activeConversationId;
 
   void getMessages(String conversationId) {
     emit(MessageLoadingState());
+    activeConversationId = conversationId;
+    updateConversationPresence(
+      conversationId: conversationId,
+      isOnline: true,
+    );
     _messagesSubscription?.cancel();
     _messagesSubscription = messageRepo
         .getMessages(conversationId)
@@ -20,12 +26,12 @@ class MessageCubit extends Cubit<MessageState> {
           (items) {
             messages = items;
             emit(MessageSuccessState(messages));
+            markConversationAsRead(conversationId);
           },
           onError: (_) {
             emit(MessageErrorState('Something went wrong. Please try again.'));
           },
         );
-    markConversationAsRead(conversationId);
   }
 
   Future<void> sendMessage({
@@ -49,9 +55,26 @@ class MessageCubit extends Cubit<MessageState> {
     await messageRepo.markConversationAsRead(conversationId);
   }
 
+  Future<void> updateConversationPresence({
+    required String conversationId,
+    required bool isOnline,
+  }) async {
+    await messageRepo.updateConversationPresence(
+      conversationId: conversationId,
+      isOnline: isOnline,
+    );
+  }
+
   @override
-  Future<void> close() {
-    _messagesSubscription?.cancel();
+  Future<void> close() async {
+    final conversationId = activeConversationId;
+    if (conversationId != null) {
+      await updateConversationPresence(
+        conversationId: conversationId,
+        isOnline: false,
+      );
+    }
+    await _messagesSubscription?.cancel();
     return super.close();
   }
 }

@@ -50,6 +50,13 @@ class MessageFirestoreService {
     final messageRef = conversationRef.collection('messages').doc();
 
     await firestore.runTransaction((transaction) async {
+      final conversationSnapshot = await transaction.get(conversationRef);
+      final conversationData = conversationSnapshot.data() ?? {};
+      final onlineUsers = List<String>.from(
+        conversationData['onlineUsers'] ?? [],
+      );
+      final receiverIsOnline = onlineUsers.contains(receiverId);
+
       transaction.set(messageRef, {
         'text': messageText,
         'senderId': currentUserId,
@@ -62,7 +69,8 @@ class MessageFirestoreService {
           'lastMessage': messageText,
           'updatedAt': FieldValue.serverTimestamp(),
           'unreadCounts.$currentUserId': 0,
-          'unreadCounts.$receiverId': FieldValue.increment(1),
+          'unreadCounts.$receiverId':
+              receiverIsOnline ? 0 : FieldValue.increment(1),
         },
       );
     });
@@ -71,6 +79,19 @@ class MessageFirestoreService {
   Future<void> markConversationAsRead(String conversationId) async {
     await firestore.collection('conversations').doc(conversationId).update({
       'unreadCounts.$_currentUserId': 0,
+    });
+  }
+
+  Future<void> updateConversationPresence({
+    required String conversationId,
+    required bool isOnline,
+  }) async {
+    final currentUserId = _currentUserId;
+    await firestore.collection('conversations').doc(conversationId).update({
+      'onlineUsers': isOnline
+          ? FieldValue.arrayUnion([currentUserId])
+          : FieldValue.arrayRemove([currentUserId]),
+      'unreadCounts.$currentUserId': 0,
     });
   }
 
