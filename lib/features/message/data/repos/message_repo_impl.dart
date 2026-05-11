@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:test_codex/core/errors/custom_exception.dart';
 import 'package:test_codex/core/errors/failure.dart';
+import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/message/data/services/message_firestore_service.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/repos/message_repo.dart';
@@ -11,6 +12,11 @@ class MessageRepoImpl extends MessageRepo {
   MessageRepoImpl({required this.messageFirestoreService});
 
   final MessageFirestoreService messageFirestoreService;
+
+  @override
+  Stream<ConversationEntity> watchConversation(String conversationId) {
+    return messageFirestoreService.watchConversation(conversationId);
+  }
 
   @override
   Stream<List<MessageEntity>> getMessages(String conversationId) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/repos/message_repo.dart';
 import 'package:test_codex/features/message/presentation/cubits/message/message_state.dart';
@@ -9,8 +10,16 @@ class MessageCubit extends Cubit<MessageState> {
 
   final MessageRepo messageRepo;
   StreamSubscription<List<MessageEntity>>? _messagesSubscription;
+  StreamSubscription<ConversationEntity>? _conversationSubscription;
   List<MessageEntity> messages = [];
+  ConversationEntity? activeConversation;
   String? activeConversationId;
+
+  void openConversation(ConversationEntity conversation) {
+    activeConversation = conversation;
+    getMessages(conversation.id);
+    watchConversation(conversation.id);
+  }
 
   void getMessages(String conversationId) {
     emit(MessageLoadingState());
@@ -32,6 +41,20 @@ class MessageCubit extends Cubit<MessageState> {
             emit(MessageErrorState('Something went wrong. Please try again.'));
           },
         );
+  }
+
+  void watchConversation(String conversationId) {
+    _conversationSubscription?.cancel();
+    _conversationSubscription =
+        messageRepo.watchConversation(conversationId).listen(
+      (conversation) {
+        activeConversation = conversation;
+        emit(MessageConversationUpdatedState(conversation));
+      },
+      onError: (_) {
+        emit(MessageErrorState('Something went wrong. Please try again.'));
+      },
+    );
   }
 
   Future<void> sendMessage({
@@ -68,13 +91,14 @@ class MessageCubit extends Cubit<MessageState> {
   @override
   Future<void> close() async {
     final conversationId = activeConversationId;
+    await _messagesSubscription?.cancel();
+    await _conversationSubscription?.cancel();
     if (conversationId != null) {
       await updateConversationPresence(
         conversationId: conversationId,
         isOnline: false,
       );
     }
-    await _messagesSubscription?.cancel();
     return super.close();
   }
 }

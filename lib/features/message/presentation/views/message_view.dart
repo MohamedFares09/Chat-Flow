@@ -21,7 +21,7 @@ class MessageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => MessageCubit(getIt<MessageRepo>())
-        ..getMessages(conversation.id),
+        ..openConversation(conversation),
       child: Scaffold(
         body: MessageViewBodyBlocConsumer(conversation: conversation),
       ),

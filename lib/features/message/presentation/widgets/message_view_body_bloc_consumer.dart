@@ -29,10 +29,11 @@ class MessageViewBodyBlocConsumer extends StatelessWidget {
       },
       builder: (context, state) {
         final cubit = context.read<MessageCubit>();
+        final activeConversation = cubit.activeConversation ?? conversation;
         return CustomProgressHud(
           isLoading: state is MessageLoadingState,
           child: MessageViewBody(
-            conversation: conversation,
+            conversation: activeConversation,
             messages: cubit.messages,
             isSending: state is MessageSendLoadingState,
           ),

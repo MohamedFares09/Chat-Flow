@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test_codex/core/errors/custom_exception.dart';
+import 'package:test_codex/features/home/data/models/conversation_model.dart';
 import 'package:test_codex/features/message/data/models/message_model.dart';
 
 class MessageFirestoreService {
@@ -11,6 +12,21 @@ class MessageFirestoreService {
 
   final FirebaseFirestore firestore;
   final FirebaseAuth firebaseAuth;
+
+  Stream<ConversationModel> watchConversation(String conversationId) {
+    final currentUserId = _currentUserId;
+    return firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .snapshots()
+        .map(
+          (doc) => ConversationModel.fromFirestore(
+            id: doc.id,
+            currentUserId: currentUserId,
+            json: doc.data() ?? {},
+          ),
+        );
+  }
 
   Stream<List<MessageModel>> getMessages(String conversationId) {
     final currentUserId = _currentUserId;
