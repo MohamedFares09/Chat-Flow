@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_codex/core/cubits/theme/theme_cubit.dart';
 import 'package:test_codex/core/services/get_it_service.dart';
+import 'package:test_codex/core/services/theme_service.dart';
 import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/core/utils/app_routes.dart';
 import 'package:test_codex/core/utils/app_theme.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ThemeCubit(),
+      create: (context) => ThemeCubit(getIt<ThemeService>())
+        ..watchSavedTheme(),
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           AppColors.setIsDark(state.isDark);
