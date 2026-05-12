@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:test_codex/features/message/presentation/widgets/cached_message_video_controller.dart';
 import 'package:test_codex/features/message/presentation/widgets/full_screen_video_view.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_duration_label.dart';
-import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 import 'package:video_player/video_player.dart';
 
 class MessageVideoContent extends StatefulWidget {
@@ -159,29 +157,21 @@ class _MessageVideoContentState extends State<MessageVideoContent> {
   }
 
   Future<void> _loadVideo() async {
-    final fileInfo = await MessageMediaCache.instance.getFileFromCache(
+    final controller = await CachedMessageVideoController.create(
       widget.videoUrl,
     );
-    final File videoFile;
-    if (fileInfo != null) {
-      videoFile = fileInfo.file;
-    } else {
-      videoFile = await MessageMediaCache.instance.getSingleFile(
-        widget.videoUrl,
-      );
-    }
-
     if (!mounted) {
+      controller.dispose();
       return;
     }
 
-    final controller = VideoPlayerController.file(videoFile);
-    _controller = controller;
     await controller.initialize();
     if (!mounted) {
+      controller.dispose();
       return;
     }
 
+    _controller = controller;
     setState(() => _isReady = true);
   }
 }

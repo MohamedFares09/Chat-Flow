@@ -4,10 +4,10 @@ class MessageMediaCache {
   const MessageMediaCache._();
 
   static final CacheManager instance = CacheManager(
-        Config(
-          'chatFlowMessageMedia',
-          stalePeriod: const Duration(days: 30),
-          maxNrOfCacheObjects: 300,
-        ),
-      );
+    Config(
+      'chatFlowMessageMedia',
+      stalePeriod: const Duration(days: 30),
+      maxNrOfCacheObjects: 300,
+    ),
+  );
 }

@@ -3,9 +3,7 @@ import 'package:test_codex/core/utils/app_colors.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/domain/entities/message_status.dart';
 import 'package:test_codex/features/message/domain/entities/message_type.dart';
-import 'package:test_codex/features/message/presentation/widgets/message_image_content.dart';
-import 'package:test_codex/features/message/presentation/widgets/message_video_content.dart';
-import 'package:test_codex/features/message/presentation/widgets/message_voice_content.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_content.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -72,7 +70,7 @@ class MessageBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _MessageContent(
+                  MessageContent(
                     message: message,
                     timeLabel: _timeLabel,
                   ),
@@ -148,43 +146,5 @@ class MessageBubble extends StatelessWidget {
   bool get _hasOverlayMeta {
     return message.type == MessageType.image ||
         message.type == MessageType.video;
-  }
-}
-
-class _MessageContent extends StatelessWidget {
-  const _MessageContent({
-    required this.message,
-    required this.timeLabel,
-  });
-
-  final MessageEntity message;
-  final String timeLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    final mediaUrl = message.mediaUrl;
-    return switch (message.type) {
-      MessageType.image when mediaUrl != null =>
-        MessageImageContent(
-          imageUrl: mediaUrl,
-          heroTag: 'message-image-${message.id}',
-          timeLabel: timeLabel,
-        ),
-      MessageType.video when mediaUrl != null =>
-        MessageVideoContent(
-          videoUrl: mediaUrl,
-          timeLabel: timeLabel,
-        ),
-      MessageType.voice when mediaUrl != null =>
-        MessageVoiceContent(voiceUrl: mediaUrl),
-      _ => Text(
-          message.text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            height: 1.47,
-          ),
-        ),
-    };
   }
 }

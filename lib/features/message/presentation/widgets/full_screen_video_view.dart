@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:test_codex/features/message/presentation/widgets/cached_message_video_controller.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_duration_label.dart';
-import 'package:test_codex/features/message/presentation/widgets/message_media_cache.dart';
 import 'package:video_player/video_player.dart';
 
 class FullScreenVideoView extends StatefulWidget {
@@ -180,30 +178,22 @@ class _FullScreenVideoViewState extends State<FullScreenVideoView> {
   }
 
   Future<void> _loadVideo() async {
-    final fileInfo = await MessageMediaCache.instance.getFileFromCache(
+    final controller = await CachedMessageVideoController.create(
       widget.videoUrl,
     );
-    final File videoFile;
-    if (fileInfo != null) {
-      videoFile = fileInfo.file;
-    } else {
-      videoFile = await MessageMediaCache.instance.getSingleFile(
-        widget.videoUrl,
-      );
-    }
-
     if (!mounted) {
+      controller.dispose();
       return;
     }
 
-    final controller = VideoPlayerController.file(videoFile)
-      ..addListener(_onVideoChanged);
-    _controller = controller;
     await controller.initialize();
     if (!mounted) {
+      controller.dispose();
       return;
     }
 
+    controller.addListener(_onVideoChanged);
+    _controller = controller;
     setState(() => _isReady = true);
   }
 }
