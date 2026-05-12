@@ -66,7 +66,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 Expanded(
                   child: RefreshIndicator(
                     color: AppColors.primary,
-                    onRefresh: () => context.read<HomeCubit>().getConversations(),
+                    onRefresh: () =>
+                        context.read<HomeCubit>().getConversations(),
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
                       children: [
@@ -109,7 +110,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             AppBottomNavBar(
               selectedIndex: 0,
               onItemSelected: (index) {
-                if (index == 3) {
+                if (index == 1) {
+                  Navigator.pushReplacementNamed(context, RouteNames.groups);
+                } else if (index == 3) {
                   Navigator.pushReplacementNamed(context, RouteNames.settings);
                 }
               },
@@ -152,20 +155,20 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           return;
         }
         context.read<HomeCubit>().addMediaStory(
-              filePath: filePath,
-              type: 'image',
-              content: result.content,
-            );
+          filePath: filePath,
+          type: 'image',
+          content: result.content,
+        );
       case StoryUploadType.video:
         final filePath = result.filePath;
         if (filePath == null) {
           return;
         }
         context.read<HomeCubit>().addMediaStory(
-              filePath: filePath,
-              type: 'video',
-              content: result.content,
-            );
+          filePath: filePath,
+          type: 'video',
+          content: result.content,
+        );
     }
   }
 

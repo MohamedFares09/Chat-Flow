@@ -6,6 +6,9 @@ import 'package:test_codex/core/services/theme_service.dart';
 import 'package:test_codex/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:test_codex/features/auth/data/services/firebase_auth_service.dart';
 import 'package:test_codex/features/auth/domain/repos/auth_repo.dart';
+import 'package:test_codex/features/groups/data/repos/groups_repo_impl.dart';
+import 'package:test_codex/features/groups/data/services/groups_firebase_service.dart';
+import 'package:test_codex/features/groups/domain/repos/groups_repo.dart';
 import 'package:test_codex/features/home/data/repos/home_repo_impl.dart';
 import 'package:test_codex/features/home/data/services/home_firestore_service.dart';
 import 'package:test_codex/features/home/domain/repos/home_repo.dart';
@@ -65,6 +68,20 @@ void setupGetIt() {
   if (!getIt.isRegistered<HomeRepo>()) {
     getIt.registerLazySingleton<HomeRepo>(
       () => HomeRepoImpl(homeFirestoreService: getIt<HomeFirestoreService>()),
+    );
+  }
+  if (!getIt.isRegistered<GroupsFirebaseService>()) {
+    getIt.registerLazySingleton<GroupsFirebaseService>(
+      () => GroupsFirebaseService(
+        firestore: getIt<FirebaseFirestore>(),
+        firebaseAuth: getIt<FirebaseAuth>(),
+      ),
+    );
+  }
+  if (!getIt.isRegistered<GroupsRepo>()) {
+    getIt.registerLazySingleton<GroupsRepo>(
+      () =>
+          GroupsRepoImpl(groupsFirebaseService: getIt<GroupsFirebaseService>()),
     );
   }
   if (!getIt.isRegistered<MessageFirestoreService>()) {

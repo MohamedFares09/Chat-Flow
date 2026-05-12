@@ -16,10 +16,7 @@ import 'package:test_codex/features/settings/presentation/widgets/settings_secti
 import 'package:test_codex/features/settings/presentation/widgets/settings_tile.dart';
 
 class SettingsViewBody extends StatelessWidget {
-  const SettingsViewBody({
-    required this.user,
-    super.key,
-  });
+  const SettingsViewBody({required this.user, super.key});
 
   final SettingsUserEntity? user;
 
@@ -125,6 +122,8 @@ class SettingsViewBody extends StatelessWidget {
               onItemSelected: (index) {
                 if (index == 0) {
                   Navigator.pushReplacementNamed(context, RouteNames.home);
+                } else if (index == 1) {
+                  Navigator.pushReplacementNamed(context, RouteNames.groups);
                 }
               },
             ),
@@ -149,8 +148,8 @@ class SettingsViewBody extends StatelessWidget {
       return;
     }
     await context.read<SettingsCubit>().updateProfile(
-          name: result.name,
-          imagePath: result.imagePath,
-        );
+      name: result.name,
+      imagePath: result.imagePath,
+    );
   }
 }
