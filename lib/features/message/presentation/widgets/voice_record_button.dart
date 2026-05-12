@@ -55,7 +55,8 @@ class _VoiceRecordButtonState extends State<VoiceRecordButton> {
     }
 
     final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/voice_'
+    final path =
+        '${tempDir.path}/voice_'
         '${DateTime.now().millisecondsSinceEpoch}.m4a';
     await _recorder.start(
       const RecordConfig(encoder: AudioEncoder.aacLc),

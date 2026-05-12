@@ -5,6 +5,8 @@ import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 import 'package:test_codex/features/message/presentation/cubits/message/message_cubit.dart';
+import 'package:test_codex/features/message/presentation/widgets/edit_message_sheet.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_actions_sheet.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_attachment_sheet.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_composer.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_header.dart';
@@ -47,6 +49,7 @@ class _MessageViewBodyState extends State<MessageViewBody> {
               child: MessagesList(
                 messages: widget.messages,
                 receiverName: widget.conversation.otherUser.name,
+                onMessageLongPress: _showMessageActions,
               ),
             ),
             MessageComposer(
@@ -70,10 +73,10 @@ class _MessageViewBodyState extends State<MessageViewBody> {
     }
     messageController.clear();
     context.read<MessageCubit>().sendMessage(
-          conversationId: widget.conversation.id,
-          receiverId: widget.conversation.otherUser.uId,
-          text: text,
-        );
+      conversationId: widget.conversation.id,
+      receiverId: widget.conversation.otherUser.uId,
+      text: text,
+    );
   }
 
   Future<void> _showAttachmentSheet() async {
@@ -128,15 +131,53 @@ class _MessageViewBodyState extends State<MessageViewBody> {
     _sendMediaMessage(filePath: filePath, type: 'voice');
   }
 
-  void _sendMediaMessage({
-    required String filePath,
-    required String type,
-  }) {
+  void _sendMediaMessage({required String filePath, required String type}) {
     context.read<MessageCubit>().sendMediaMessage(
-          conversationId: widget.conversation.id,
-          receiverId: widget.conversation.otherUser.uId,
-          filePath: filePath,
-          type: type,
-        );
+      conversationId: widget.conversation.id,
+      receiverId: widget.conversation.otherUser.uId,
+      filePath: filePath,
+      type: type,
+    );
+  }
+
+  Future<void> _showMessageActions(MessageEntity message) async {
+    final action = await showModalBottomSheet<MessageAction>(
+      context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => MessageActionsSheet(message: message),
+    );
+    if (action == null || !mounted) {
+      return;
+    }
+
+    switch (action) {
+      case MessageAction.edit:
+        await _editMessage(message);
+      case MessageAction.delete:
+        context.read<MessageCubit>().deleteMessage(message.id);
+    }
+  }
+
+  Future<void> _editMessage(MessageEntity message) async {
+    final text = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => EditMessageSheet(message: message),
+    );
+    if (text == null || !mounted) {
+      return;
+    }
+    context.read<MessageCubit>().updateMessage(
+      messageId: message.id,
+      text: text,
+    );
   }
 }

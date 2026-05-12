@@ -4,8 +4,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/features/groups/domain/entities/group_entity.dart';
 import 'package:test_codex/features/groups/presentation/cubits/group_chat/group_chat_cubit.dart';
+import 'package:test_codex/features/groups/presentation/views/group_details_view.dart';
 import 'package:test_codex/features/groups/presentation/widgets/group_message_header.dart';
 import 'package:test_codex/features/message/domain/entities/message_entity.dart';
+import 'package:test_codex/features/message/presentation/widgets/edit_message_sheet.dart';
+import 'package:test_codex/features/message/presentation/widgets/message_actions_sheet.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_attachment_sheet.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_composer.dart';
 import 'package:test_codex/features/message/presentation/widgets/messages_list.dart';
@@ -42,11 +45,15 @@ class _GroupChatViewBodyState extends State<GroupChatViewBody> {
       child: SafeArea(
         child: Column(
           children: [
-            GroupMessageHeader(group: widget.group),
+            GroupMessageHeader(
+              group: widget.group,
+              onGroupInfoTap: _openGroupDetails,
+            ),
             Expanded(
               child: MessagesList(
                 messages: widget.messages,
                 receiverName: widget.group.name,
+                onMessageLongPress: _showMessageActions,
               ),
             ),
             MessageComposer(
@@ -132,6 +139,55 @@ class _GroupChatViewBodyState extends State<GroupChatViewBody> {
       groupId: widget.group.id,
       filePath: filePath,
       type: type,
+    );
+  }
+
+  void _openGroupDetails() {
+    Navigator.pushNamed(
+      context,
+      GroupDetailsView.route,
+      arguments: widget.group,
+    );
+  }
+
+  Future<void> _showMessageActions(MessageEntity message) async {
+    final action = await showModalBottomSheet<MessageAction>(
+      context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => MessageActionsSheet(message: message),
+    );
+    if (action == null || !mounted) {
+      return;
+    }
+
+    switch (action) {
+      case MessageAction.edit:
+        await _editMessage(message);
+      case MessageAction.delete:
+        context.read<GroupChatCubit>().deleteMessage(message.id);
+    }
+  }
+
+  Future<void> _editMessage(MessageEntity message) async {
+    final text = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => EditMessageSheet(message: message),
+    );
+    if (text == null || !mounted) {
+      return;
+    }
+    context.read<GroupChatCubit>().updateMessage(
+      messageId: message.id,
+      text: text,
     );
   }
 }

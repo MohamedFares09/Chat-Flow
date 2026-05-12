@@ -89,6 +89,44 @@ class GroupChatCubit extends Cubit<GroupChatState> {
     );
   }
 
+  Future<void> updateMessage({
+    required String messageId,
+    required String text,
+  }) async {
+    final group = activeGroup;
+    if (group == null) {
+      emit(GroupChatErrorState('Group was not found.'));
+      return;
+    }
+    emit(GroupChatSendLoadingState(messages));
+    final result = await groupsRepo.updateGroupMessage(
+      groupId: group.id,
+      messageId: messageId,
+      text: text,
+    );
+    result.fold(
+      (failure) => emit(GroupChatErrorState(failure.message)),
+      (_) => emit(GroupChatSentState(messages)),
+    );
+  }
+
+  Future<void> deleteMessage(String messageId) async {
+    final group = activeGroup;
+    if (group == null) {
+      emit(GroupChatErrorState('Group was not found.'));
+      return;
+    }
+    emit(GroupChatSendLoadingState(messages));
+    final result = await groupsRepo.deleteGroupMessage(
+      groupId: group.id,
+      messageId: messageId,
+    );
+    result.fold(
+      (failure) => emit(GroupChatErrorState(failure.message)),
+      (_) => emit(GroupChatSentState(messages)),
+    );
+  }
+
   @override
   Future<void> close() async {
     await _groupSubscription?.cancel();

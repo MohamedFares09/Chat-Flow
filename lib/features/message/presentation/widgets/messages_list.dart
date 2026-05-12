@@ -8,11 +8,13 @@ class MessagesList extends StatelessWidget {
   const MessagesList({
     required this.messages,
     required this.receiverName,
+    this.onMessageLongPress,
     super.key,
   });
 
   final List<MessageEntity> messages;
   final String receiverName;
+  final ValueChanged<MessageEntity>? onMessageLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,9 @@ class MessagesList extends StatelessWidget {
           child: MessageBubble(
             message: message,
             receiverName: receiverName,
+            onLongPress: onMessageLongPress == null
+                ? null
+                : () => onMessageLongPress!(message),
           ),
         );
       },

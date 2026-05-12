@@ -127,4 +127,71 @@ class GroupsRepoImpl extends GroupsRepo {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> updateGroupMessage({
+    required String groupId,
+    required String messageId,
+    required String text,
+  }) async {
+    try {
+      await groupsFirebaseService.updateGroupMessage(
+        groupId: groupId,
+        messageId: messageId,
+        text: text,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception GroupsRepoImpl - updateGroupMessage: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteGroupMessage({
+    required String groupId,
+    required String messageId,
+  }) async {
+    try {
+      await groupsFirebaseService.deleteGroupMessage(
+        groupId: groupId,
+        messageId: messageId,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception GroupsRepoImpl - deleteGroupMessage: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, GroupEntity>> updateGroupDetails({
+    required String groupId,
+    required String name,
+    String? imagePath,
+  }) async {
+    try {
+      final group = await groupsFirebaseService.updateGroupDetails(
+        groupId: groupId,
+        name: name,
+        imagePath: imagePath,
+      );
+      return right(group);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception GroupsRepoImpl - updateGroupDetails: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
 }

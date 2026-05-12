@@ -112,7 +112,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               onItemSelected: (index) {
                 if (index == 1) {
                   Navigator.pushReplacementNamed(context, RouteNames.groups);
-                } else if (index == 3) {
+                } else if (index == 2) {
                   Navigator.pushReplacementNamed(context, RouteNames.settings);
                 }
               },

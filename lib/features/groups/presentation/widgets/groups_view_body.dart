@@ -100,7 +100,7 @@ class _GroupsViewBodyState extends State<GroupsViewBody> {
               onItemSelected: (index) {
                 if (index == 0) {
                   Navigator.pushReplacementNamed(context, RouteNames.home);
-                } else if (index == 3) {
+                } else if (index == 2) {
                   Navigator.pushReplacementNamed(context, RouteNames.settings);
                 }
               },

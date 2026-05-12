@@ -4,10 +4,7 @@ import 'package:test_codex/features/message/presentation/widgets/message_duratio
 import 'package:video_player/video_player.dart';
 
 class FullScreenVideoView extends StatefulWidget {
-  const FullScreenVideoView({
-    required this.videoUrl,
-    super.key,
-  });
+  const FullScreenVideoView({required this.videoUrl, super.key});
 
   final String videoUrl;
 

@@ -56,11 +56,8 @@ class MessageComposer extends StatelessWidget {
                       controller: controller,
                       minLines: 1,
                       maxLines: 4,
-                      style: TextStyle(
-                        color: AppColors.title,
-                        fontSize: 16,
-                      ),
-                      decoration:  InputDecoration(
+                      style: TextStyle(color: AppColors.title, fontSize: 16),
+                      decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Type a message...',
                         hintStyle: TextStyle(
@@ -74,10 +71,7 @@ class MessageComposer extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: isSending ? null : onAttachTap,
-                    icon: Icon(
-                      Icons.attach_file,
-                      color: AppColors.body,
-                    ),
+                    icon: Icon(Icons.attach_file, color: AppColors.body),
                   ),
                   IconButton(
                     onPressed: isSending ? null : onCameraTap,

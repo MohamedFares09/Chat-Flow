@@ -103,10 +103,8 @@ class MessageImageContent extends StatelessWidget {
   void _openFullScreenImage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => FullScreenImageView(
-          imageUrl: imageUrl,
-          heroTag: heroTag,
-        ),
+        builder: (_) =>
+            FullScreenImageView(imageUrl: imageUrl, heroTag: heroTag),
       ),
     );
   }

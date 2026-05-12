@@ -20,24 +20,21 @@ class MessageContent extends StatelessWidget {
     final mediaUrl = message.mediaUrl;
     return switch (message.type) {
       MessageType.image when mediaUrl != null => MessageImageContent(
-          imageUrl: mediaUrl,
-          heroTag: 'message-image-${message.id}',
-          timeLabel: timeLabel,
-        ),
+        imageUrl: mediaUrl,
+        heroTag: 'message-image-${message.id}',
+        timeLabel: timeLabel,
+      ),
       MessageType.video when mediaUrl != null => MessageVideoContent(
-          videoUrl: mediaUrl,
-          timeLabel: timeLabel,
-        ),
-      MessageType.voice when mediaUrl != null =>
-        MessageVoiceContent(voiceUrl: mediaUrl),
+        videoUrl: mediaUrl,
+        timeLabel: timeLabel,
+      ),
+      MessageType.voice when mediaUrl != null => MessageVoiceContent(
+        voiceUrl: mediaUrl,
+      ),
       _ => Text(
-          message.text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            height: 1.47,
-          ),
-        ),
+        message.text,
+        style: const TextStyle(color: Colors.white, fontSize: 15, height: 1.47),
+      ),
     };
   }
 }

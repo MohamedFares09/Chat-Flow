@@ -58,10 +58,7 @@ class _AttachmentTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
-          color: AppColors.title,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: AppColors.title, fontWeight: FontWeight.w600),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),

@@ -4,10 +4,7 @@ import 'package:test_codex/features/home/domain/entities/conversation_entity.dar
 import 'package:test_codex/features/message/presentation/widgets/message_user_avatar.dart';
 
 class MessageHeader extends StatelessWidget {
-  const MessageHeader({
-    required this.conversation,
-    super.key,
-  });
+  const MessageHeader({required this.conversation, super.key});
 
   final ConversationEntity conversation;
 

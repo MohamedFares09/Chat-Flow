@@ -24,10 +24,7 @@ class MessageCubit extends Cubit<MessageState> {
   void getMessages(String conversationId) {
     emit(MessageLoadingState());
     activeConversationId = conversationId;
-    updateConversationPresence(
-      conversationId: conversationId,
-      isOnline: true,
-    );
+    updateConversationPresence(conversationId: conversationId, isOnline: true);
     _messagesSubscription?.cancel();
     _messagesSubscription = messageRepo
         .getMessages(conversationId)
@@ -45,16 +42,17 @@ class MessageCubit extends Cubit<MessageState> {
 
   void watchConversation(String conversationId) {
     _conversationSubscription?.cancel();
-    _conversationSubscription =
-        messageRepo.watchConversation(conversationId).listen(
-      (conversation) {
-        activeConversation = conversation;
-        emit(MessageConversationUpdatedState(conversation));
-      },
-      onError: (_) {
-        emit(MessageErrorState('Something went wrong. Please try again.'));
-      },
-    );
+    _conversationSubscription = messageRepo
+        .watchConversation(conversationId)
+        .listen(
+          (conversation) {
+            activeConversation = conversation;
+            emit(MessageConversationUpdatedState(conversation));
+          },
+          onError: (_) {
+            emit(MessageErrorState('Something went wrong. Please try again.'));
+          },
+        );
   }
 
   Future<void> sendMessage({
@@ -88,6 +86,44 @@ class MessageCubit extends Cubit<MessageState> {
       filePath: filePath,
       type: type,
       text: text,
+    );
+    result.fold(
+      (failure) => emit(MessageErrorState(failure.message)),
+      (_) => emit(MessageSentState(messages)),
+    );
+  }
+
+  Future<void> updateMessage({
+    required String messageId,
+    required String text,
+  }) async {
+    final conversationId = activeConversationId;
+    if (conversationId == null) {
+      emit(MessageErrorState('Conversation was not found.'));
+      return;
+    }
+    emit(MessageSendLoadingState(messages));
+    final result = await messageRepo.updateMessage(
+      conversationId: conversationId,
+      messageId: messageId,
+      text: text,
+    );
+    result.fold(
+      (failure) => emit(MessageErrorState(failure.message)),
+      (_) => emit(MessageSentState(messages)),
+    );
+  }
+
+  Future<void> deleteMessage(String messageId) async {
+    final conversationId = activeConversationId;
+    if (conversationId == null) {
+      emit(MessageErrorState('Conversation was not found.'));
+      return;
+    }
+    emit(MessageSendLoadingState(messages));
+    final result = await messageRepo.deleteMessage(
+      conversationId: conversationId,
+      messageId: messageId,
     );
     result.fold(
       (failure) => emit(MessageErrorState(failure.message)),

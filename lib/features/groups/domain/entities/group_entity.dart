@@ -9,6 +9,7 @@ class GroupEntity {
     required this.createdAt,
     required this.updatedAt,
     required this.lastMessage,
+    this.photoUrl,
   });
 
   final String id;
@@ -18,4 +19,5 @@ class GroupEntity {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String lastMessage;
+  final String? photoUrl;
 }

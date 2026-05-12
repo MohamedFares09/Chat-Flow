@@ -40,7 +40,9 @@ class MessageRepoImpl extends MessageRepo {
       return left(ServerFailure(e.message));
     } catch (e) {
       log('Exception MessageRepoImpl - sendMessage: $e');
-      return left(const ServerFailure('Something went wrong. Please try again.'));
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
     }
   }
 
@@ -65,7 +67,53 @@ class MessageRepoImpl extends MessageRepo {
       return left(ServerFailure(e.message));
     } catch (e) {
       log('Exception MessageRepoImpl - sendMediaMessage: $e');
-      return left(const ServerFailure('Something went wrong. Please try again.'));
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updateMessage({
+    required String conversationId,
+    required String messageId,
+    required String text,
+  }) async {
+    try {
+      await messageFirestoreService.updateMessage(
+        conversationId: conversationId,
+        messageId: messageId,
+        text: text,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception MessageRepoImpl - updateMessage: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteMessage({
+    required String conversationId,
+    required String messageId,
+  }) async {
+    try {
+      await messageFirestoreService.deleteMessage(
+        conversationId: conversationId,
+        messageId: messageId,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception MessageRepoImpl - deleteMessage: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
     }
   }
 
@@ -80,7 +128,9 @@ class MessageRepoImpl extends MessageRepo {
       return left(ServerFailure(e.message));
     } catch (e) {
       log('Exception MessageRepoImpl - markConversationAsRead: $e');
-      return left(const ServerFailure('Something went wrong. Please try again.'));
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
     }
   }
 
@@ -99,7 +149,9 @@ class MessageRepoImpl extends MessageRepo {
       return left(ServerFailure(e.message));
     } catch (e) {
       log('Exception MessageRepoImpl - updateConversationPresence: $e');
-      return left(const ServerFailure('Something went wrong. Please try again.'));
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
     }
   }
 }

@@ -128,6 +128,7 @@ class GroupsFirebaseService {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       lastMessage: '',
+      photoUrl: null,
     );
 
     await groupRef.set({
@@ -247,6 +248,128 @@ class GroupsFirebaseService {
     });
   }
 
+  Future<void> updateGroupMessage({
+    required String groupId,
+    required String messageId,
+    required String text,
+  }) async {
+    final currentUserId = _currentUserId;
+    final messageText = text.trim();
+    if (messageText.isEmpty) {
+      throw CustomException('Please write a message first.');
+    }
+    await _ensureCurrentUserIsMember(groupId);
+
+    final groupRef = firestore.collection('groups').doc(groupId);
+    final messageRef = groupRef.collection('messages').doc(messageId);
+
+    await firestore.runTransaction((transaction) async {
+      final messageSnapshot = await transaction.get(messageRef);
+      final groupSnapshot = await transaction.get(groupRef);
+      final messageData = messageSnapshot.data();
+      if (messageData == null) {
+        throw CustomException('Message was not found.');
+      }
+      if (messageData['senderId'] != currentUserId) {
+        throw CustomException('You can only edit your messages.');
+      }
+      if (messageData['type'] != 'text') {
+        throw CustomException('Only text messages can be edited.');
+      }
+
+      transaction.update(messageRef, {
+        'text': messageText,
+        'editedAt': FieldValue.serverTimestamp(),
+      });
+
+      final groupData = groupSnapshot.data() ?? {};
+      if (groupData['lastMessage'] == messageData['text']) {
+        transaction.update(groupRef, {
+          'lastMessage': messageText,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+      }
+    });
+  }
+
+  Future<void> deleteGroupMessage({
+    required String groupId,
+    required String messageId,
+  }) async {
+    final currentUserId = _currentUserId;
+    await _ensureCurrentUserIsMember(groupId);
+
+    final groupRef = firestore.collection('groups').doc(groupId);
+    final messageRef = groupRef.collection('messages').doc(messageId);
+
+    await firestore.runTransaction((transaction) async {
+      final messageSnapshot = await transaction.get(messageRef);
+      final groupSnapshot = await transaction.get(groupRef);
+      final messageData = messageSnapshot.data();
+      if (messageData == null) {
+        throw CustomException('Message was not found.');
+      }
+      if (messageData['senderId'] != currentUserId) {
+        throw CustomException('You can only delete your messages.');
+      }
+
+      transaction.delete(messageRef);
+
+      final groupData = groupSnapshot.data() ?? {};
+      if (groupData['lastMessage'] ==
+          _previewText(
+            messageData['type'] ?? 'text',
+            messageData['text'] ?? '',
+          )) {
+        transaction.update(groupRef, {
+          'lastMessage': 'Message deleted',
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+      }
+    });
+  }
+
+  Future<GroupModel> updateGroupDetails({
+    required String groupId,
+    required String name,
+    String? imagePath,
+  }) async {
+    final cleanName = name.trim();
+    if (cleanName.isEmpty) {
+      throw CustomException('Please enter a group name.');
+    }
+
+    final groupRef = firestore.collection('groups').doc(groupId);
+    final groupDoc = await groupRef.get();
+    final groupData = groupDoc.data();
+    if (groupData == null) {
+      throw CustomException('Group was not found.');
+    }
+    _ensureCurrentUserIsMemberData(groupData);
+
+    final savedPhotoUrl = groupData['photoUrl'];
+    final photoUrl = await _uploadGroupImage(
+      groupId: groupId,
+      imagePath: imagePath,
+      fallbackPhotoUrl:
+          savedPhotoUrl is String && savedPhotoUrl.trim().isNotEmpty
+          ? savedPhotoUrl
+          : null,
+    );
+
+    await groupRef.set({
+      'name': cleanName,
+      'photoUrl': photoUrl,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    final updatedDoc = await groupRef.get();
+    return GroupModel.fromFirestore(
+      id: updatedDoc.id,
+      json: updatedDoc.data() ?? {},
+    );
+  }
+
   Future<void> _ensureCurrentUserIsMember(String groupId) async {
     final doc = await firestore.collection('groups').doc(groupId).get();
     final data = doc.data();
@@ -283,6 +406,30 @@ class GroupsFirebaseService {
       'voice' => 'm4a',
       _ => 'file',
     };
+  }
+
+  Future<String?> _uploadGroupImage({
+    required String groupId,
+    required String? imagePath,
+    required String? fallbackPhotoUrl,
+  }) async {
+    final cleanPath = imagePath?.trim();
+    if (cleanPath == null || cleanPath.isEmpty) {
+      return fallbackPhotoUrl;
+    }
+
+    final file = File(cleanPath);
+    if (!await file.exists()) {
+      throw CustomException('Selected group image was not found.');
+    }
+
+    final fileName = file.uri.pathSegments.last;
+    final extension = fileName.contains('.') ? fileName.split('.').last : 'jpg';
+    final ref = firebaseStorage.ref(
+      'groups/$groupId/profile_${DateTime.now().millisecondsSinceEpoch}.$extension',
+    );
+    await ref.putFile(file);
+    return ref.getDownloadURL();
   }
 
   String _previewText(String type, String text) {

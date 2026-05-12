@@ -8,7 +8,8 @@ class CachedMessageVideoController {
     final fileInfo = await MessageMediaCache.instance.getFileFromCache(
       videoUrl,
     );
-    final videoFile = fileInfo?.file ??
+    final videoFile =
+        fileInfo?.file ??
         await MessageMediaCache.instance.getSingleFile(videoUrl);
     return VideoPlayerController.file(videoFile);
   }

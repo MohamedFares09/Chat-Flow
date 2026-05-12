@@ -8,10 +8,7 @@ import 'package:test_codex/features/message/presentation/cubits/message/message_
 import 'package:test_codex/features/message/presentation/widgets/message_view_body_bloc_consumer.dart';
 
 class MessageView extends StatelessWidget {
-  const MessageView({
-    required this.conversation,
-    super.key,
-  });
+  const MessageView({required this.conversation, super.key});
 
   static const String route = RouteNames.message;
 
@@ -20,8 +17,8 @@ class MessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MessageCubit(getIt<MessageRepo>())
-        ..openConversation(conversation),
+      create: (context) =>
+          MessageCubit(getIt<MessageRepo>())..openConversation(conversation),
       child: Scaffold(
         body: MessageViewBodyBlocConsumer(conversation: conversation),
       ),

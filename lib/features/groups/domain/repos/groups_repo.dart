@@ -33,4 +33,21 @@ abstract class GroupsRepo {
     required String type,
     String text,
   });
+
+  Future<Either<Failure, Unit>> updateGroupMessage({
+    required String groupId,
+    required String messageId,
+    required String text,
+  });
+
+  Future<Either<Failure, Unit>> deleteGroupMessage({
+    required String groupId,
+    required String messageId,
+  });
+
+  Future<Either<Failure, GroupEntity>> updateGroupDetails({
+    required String groupId,
+    required String name,
+    String? imagePath,
+  });
 }

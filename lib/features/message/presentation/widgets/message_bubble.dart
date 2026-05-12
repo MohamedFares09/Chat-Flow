@@ -9,11 +9,13 @@ class MessageBubble extends StatelessWidget {
   const MessageBubble({
     required this.message,
     required this.receiverName,
+    this.onLongPress,
     super.key,
   });
 
   final MessageEntity message;
   final String receiverName;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -33,74 +35,70 @@ class MessageBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, bottom: 4),
                 child: Text(
                   receiverName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xffcdbdff),
                     fontSize: 11,
                     height: 1.5,
                   ),
                 ),
               ),
-            Container(
-              padding: _bubblePadding,
-              decoration: BoxDecoration(
-                color: message.isMine ? null : const Color(0xff1d2027),
-                gradient: message.isMine
-                    ? LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppColors.primary, AppColors.purple],
-                      )
-                    : null,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(message.isMine ? 16 : 0),
-                  topRight: Radius.circular(message.isMine ? 0 : 16),
-                  bottomLeft: const Radius.circular(16),
-                  bottomRight: const Radius.circular(16),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: message.isMine
-                        ? AppColors.primary.withValues(alpha: 0.3)
-                        : Colors.black.withValues(alpha: 0.05),
-                    blurRadius: message.isMine ? 8 : 1,
-                    offset: Offset(0, message.isMine ? 4 : 1),
+            GestureDetector(
+              onLongPress: message.isMine ? onLongPress : null,
+              child: Container(
+                padding: _bubblePadding,
+                decoration: BoxDecoration(
+                  color: message.isMine ? null : const Color(0xff1d2027),
+                  gradient: message.isMine
+                      ? LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [AppColors.primary, AppColors.purple],
+                        )
+                      : null,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(message.isMine ? 16 : 0),
+                    topRight: Radius.circular(message.isMine ? 0 : 16),
+                    bottomLeft: const Radius.circular(16),
+                    bottomRight: const Radius.circular(16),
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MessageContent(
-                    message: message,
-                    timeLabel: _timeLabel,
-                  ),
-                  if (!_hasOverlayMeta) ...[
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _timeLabel,
-                          style: TextStyle(
-                            color: message.isMine
-                                ? Colors.white.withValues(alpha: 0.7)
-                                : AppColors.body.withValues(alpha: 0.6),
-                            fontSize: 10,
-                            height: 1.5,
-                          ),
-                        ),
-                        if (message.isMine) ...[
-                          const SizedBox(width: 4),
-                          Icon(
-                            _statusIcon,
-                            color: _statusColor,
-                            size: 14,
-                          ),
-                        ],
-                      ],
+                  boxShadow: [
+                    BoxShadow(
+                      color: message.isMine
+                          ? AppColors.primary.withValues(alpha: 0.3)
+                          : Colors.black.withValues(alpha: 0.05),
+                      blurRadius: message.isMine ? 8 : 1,
+                      offset: Offset(0, message.isMine ? 4 : 1),
                     ),
                   ],
-                ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MessageContent(message: message, timeLabel: _timeLabel),
+                    if (!_hasOverlayMeta) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _timeLabel,
+                            style: TextStyle(
+                              color: message.isMine
+                                  ? Colors.white.withValues(alpha: 0.7)
+                                  : AppColors.body.withValues(alpha: 0.6),
+                              fontSize: 10,
+                              height: 1.5,
+                            ),
+                          ),
+                          if (message.isMine) ...[
+                            const SizedBox(width: 4),
+                            Icon(_statusIcon, color: _statusColor, size: 14),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
           ],

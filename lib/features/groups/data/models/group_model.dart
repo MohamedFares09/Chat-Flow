@@ -12,6 +12,7 @@ class GroupModel extends GroupEntity {
     required super.createdAt,
     required super.updatedAt,
     required super.lastMessage,
+    super.photoUrl,
   });
 
   factory GroupModel.fromFirestore({
@@ -40,6 +41,7 @@ class GroupModel extends GroupEntity {
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
       lastMessage: json['lastMessage'] ?? '',
+      photoUrl: json['photoUrl'] is String ? json['photoUrl'] : null,
     );
   }
 
@@ -52,6 +54,7 @@ class GroupModel extends GroupEntity {
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
       lastMessage: group.lastMessage,
+      photoUrl: group.photoUrl,
     );
   }
 
@@ -64,6 +67,7 @@ class GroupModel extends GroupEntity {
       'memberPhotoUrls': _memberMap((user) => user.photoUrl),
       'createdBy': createdBy,
       'lastMessage': lastMessage,
+      'photoUrl': photoUrl,
     };
   }
 

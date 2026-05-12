@@ -22,6 +22,17 @@ abstract class MessageRepo {
     String text,
   });
 
+  Future<Either<Failure, Unit>> updateMessage({
+    required String conversationId,
+    required String messageId,
+    required String text,
+  });
+
+  Future<Either<Failure, Unit>> deleteMessage({
+    required String conversationId,
+    required String messageId,
+  });
+
   Future<Either<Failure, Unit>> markConversationAsRead(String conversationId);
 
   Future<Either<Failure, Unit>> updateConversationPresence({

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:test_codex/features/message/presentation/widgets/message_duration_label.dart';
 
 class MessageVoiceContent extends StatefulWidget {
-  const MessageVoiceContent({
-    required this.voiceUrl,
-    super.key,
-  });
+  const MessageVoiceContent({required this.voiceUrl, super.key});
 
   final String voiceUrl;
 
@@ -99,9 +96,7 @@ class _MessageVoiceContentState extends State<MessageVoiceContent> {
                     value: _sliderValue,
                     max: _sliderMax,
                     onChanged: (value) {
-                      _audioPlayer.seek(
-                        Duration(milliseconds: value.round()),
-                      );
+                      _audioPlayer.seek(Duration(milliseconds: value.round()));
                     },
                   ),
                 ),

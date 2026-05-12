@@ -65,9 +65,9 @@ class MessageFirestoreService {
       throw CustomException('Please write a message first.');
     }
 
-    final conversationRef = firestore.collection('conversations').doc(
-          conversationId,
-        );
+    final conversationRef = firestore
+        .collection('conversations')
+        .doc(conversationId);
     final messageRef = conversationRef.collection('messages').doc();
 
     await firestore.runTransaction((transaction) async {
@@ -88,16 +88,14 @@ class MessageFirestoreService {
         'status': messageStatus,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      transaction.update(
-        conversationRef,
-        {
-          'lastMessage': messageText,
-          'updatedAt': FieldValue.serverTimestamp(),
-          'unreadCounts.$currentUserId': 0,
-          'unreadCounts.$receiverId':
-              receiverIsOnline ? 0 : FieldValue.increment(1),
-        },
-      );
+      transaction.update(conversationRef, {
+        'lastMessage': messageText,
+        'updatedAt': FieldValue.serverTimestamp(),
+        'unreadCounts.$currentUserId': 0,
+        'unreadCounts.$receiverId': receiverIsOnline
+            ? 0
+            : FieldValue.increment(1),
+      });
     });
   }
 
@@ -127,9 +125,9 @@ class MessageFirestoreService {
     await ref.putFile(file);
     final mediaUrl = await ref.getDownloadURL();
 
-    final conversationRef = firestore.collection('conversations').doc(
-          conversationId,
-        );
+    final conversationRef = firestore
+        .collection('conversations')
+        .doc(conversationId);
     final messageRef = conversationRef.collection('messages').doc();
     final previewText = _previewText(messageType, text);
 
@@ -151,16 +149,96 @@ class MessageFirestoreService {
         'status': messageStatus,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      transaction.update(
-        conversationRef,
-        {
-          'lastMessage': previewText,
+      transaction.update(conversationRef, {
+        'lastMessage': previewText,
+        'updatedAt': FieldValue.serverTimestamp(),
+        'unreadCounts.$currentUserId': 0,
+        'unreadCounts.$receiverId': receiverIsOnline
+            ? 0
+            : FieldValue.increment(1),
+      });
+    });
+  }
+
+  Future<void> updateMessage({
+    required String conversationId,
+    required String messageId,
+    required String text,
+  }) async {
+    final currentUserId = _currentUserId;
+    final messageText = text.trim();
+    if (messageText.isEmpty) {
+      throw CustomException('Please write a message first.');
+    }
+
+    final conversationRef = firestore
+        .collection('conversations')
+        .doc(conversationId);
+    final messageRef = conversationRef.collection('messages').doc(messageId);
+
+    await firestore.runTransaction((transaction) async {
+      final messageSnapshot = await transaction.get(messageRef);
+      final conversationSnapshot = await transaction.get(conversationRef);
+      final messageData = messageSnapshot.data();
+      if (messageData == null) {
+        throw CustomException('Message was not found.');
+      }
+      if (messageData['senderId'] != currentUserId) {
+        throw CustomException('You can only edit your messages.');
+      }
+      if (messageData['type'] != 'text') {
+        throw CustomException('Only text messages can be edited.');
+      }
+
+      transaction.update(messageRef, {
+        'text': messageText,
+        'editedAt': FieldValue.serverTimestamp(),
+      });
+
+      final conversationData = conversationSnapshot.data() ?? {};
+      if (conversationData['lastMessage'] == messageData['text']) {
+        transaction.update(conversationRef, {
+          'lastMessage': messageText,
           'updatedAt': FieldValue.serverTimestamp(),
-          'unreadCounts.$currentUserId': 0,
-          'unreadCounts.$receiverId':
-              receiverIsOnline ? 0 : FieldValue.increment(1),
-        },
-      );
+        });
+      }
+    });
+  }
+
+  Future<void> deleteMessage({
+    required String conversationId,
+    required String messageId,
+  }) async {
+    final currentUserId = _currentUserId;
+    final conversationRef = firestore
+        .collection('conversations')
+        .doc(conversationId);
+    final messageRef = conversationRef.collection('messages').doc(messageId);
+
+    await firestore.runTransaction((transaction) async {
+      final messageSnapshot = await transaction.get(messageRef);
+      final conversationSnapshot = await transaction.get(conversationRef);
+      final messageData = messageSnapshot.data();
+      if (messageData == null) {
+        throw CustomException('Message was not found.');
+      }
+      if (messageData['senderId'] != currentUserId) {
+        throw CustomException('You can only delete your messages.');
+      }
+
+      transaction.delete(messageRef);
+
+      final conversationData = conversationSnapshot.data() ?? {};
+      if (conversationData['lastMessage'] ==
+          _previewText(
+            messageData['type'] ?? 'text',
+            messageData['text'] ?? '',
+          )) {
+        transaction.update(conversationRef, {
+          'lastMessage': 'Message deleted',
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+      }
     });
   }
 
@@ -202,10 +280,7 @@ class MessageFirestoreService {
         .where('receiverId', isEqualTo: _currentUserId)
         .where('status', isNull: true)
         .get();
-    final unreadMessages = [
-      ...snapshot.docs,
-      ...legacySnapshot.docs,
-    ];
+    final unreadMessages = [...snapshot.docs, ...legacySnapshot.docs];
     if (unreadMessages.isEmpty) {
       return;
     }

@@ -118,7 +118,7 @@ class SettingsViewBody extends StatelessWidget {
               ],
             ),
             AppBottomNavBar(
-              selectedIndex: 3,
+              selectedIndex: 2,
               onItemSelected: (index) {
                 if (index == 0) {
                   Navigator.pushReplacementNamed(context, RouteNames.home);

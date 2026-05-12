@@ -1,11 +1,11 @@
 {
-    "name": "test_codex",
-    "short_name": "test_codex",
+    "name": "Chat Flow",
+    "short_name": "Chat Flow",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Chat Flow messaging app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

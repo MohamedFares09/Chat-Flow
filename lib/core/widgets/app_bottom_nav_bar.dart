@@ -46,16 +46,10 @@ class AppBottomNavBar extends StatelessWidget {
               onTap: () => onItemSelected(1),
             ),
             _BottomNavItem(
-              icon: Icons.call_outlined,
-              label: 'Calls',
-              isActive: selectedIndex == 2,
-              onTap: () => onItemSelected(2),
-            ),
-            _BottomNavItem(
               icon: Icons.settings,
               label: 'Settings',
-              isActive: selectedIndex == 3,
-              onTap: () => onItemSelected(3),
+              isActive: selectedIndex == 2,
+              onTap: () => onItemSelected(2),
             ),
           ],
         ),

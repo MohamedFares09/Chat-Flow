@@ -8,10 +8,7 @@ import 'package:test_codex/features/message/presentation/cubits/message/message_
 import 'package:test_codex/features/message/presentation/widgets/message_view_body.dart';
 
 class MessageViewBodyBlocConsumer extends StatelessWidget {
-  const MessageViewBodyBlocConsumer({
-    required this.conversation,
-    super.key,
-  });
+  const MessageViewBodyBlocConsumer({required this.conversation, super.key});
 
   final ConversationEntity conversation;
 

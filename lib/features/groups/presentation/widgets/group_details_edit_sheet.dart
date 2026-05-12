@@ -1,0 +1,153 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:test_codex/core/utils/app_colors.dart';
+import 'package:test_codex/core/utils/validators.dart';
+import 'package:test_codex/core/widgets/custom_button.dart';
+import 'package:test_codex/features/groups/domain/entities/group_entity.dart';
+import 'package:test_codex/features/groups/presentation/models/group_details_update_data.dart';
+import 'package:test_codex/features/groups/presentation/widgets/group_avatar.dart';
+
+class GroupDetailsEditSheet extends StatefulWidget {
+  const GroupDetailsEditSheet({required this.group, super.key});
+
+  final GroupEntity group;
+
+  @override
+  State<GroupDetailsEditSheet> createState() => _GroupDetailsEditSheetState();
+}
+
+class _GroupDetailsEditSheetState extends State<GroupDetailsEditSheet> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late final TextEditingController nameController;
+  String? selectedImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.group.name);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Edit Group',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.title,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 22),
+                Center(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      selectedImagePath == null
+                          ? GroupAvatar(
+                              name: nameController.text.trim().isEmpty
+                                  ? widget.group.name
+                                  : nameController.text,
+                              photoUrl: widget.group.photoUrl,
+                              size: 104,
+                            )
+                          : CircleAvatar(
+                              radius: 52,
+                              backgroundImage: FileImage(
+                                File(selectedImagePath!),
+                              ),
+                            ),
+                      Positioned(
+                        right: -2,
+                        bottom: -2,
+                        child: IconButton.filled(
+                          onPressed: pickImage,
+                          style: IconButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                          ),
+                          icon: const Icon(Icons.photo_camera_outlined),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 26),
+                TextFormField(
+                  controller: nameController,
+                  validator: Validators.requiredField,
+                  onChanged: (_) => setState(() {}),
+                  cursorColor: AppColors.accent,
+                  style: TextStyle(color: AppColors.title),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.input,
+                    hintText: 'Group name',
+                    prefixIcon: Icon(
+                      Icons.groups_outlined,
+                      color: AppColors.body,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors.accent),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CustomButton(text: 'Save Changes', onPressed: submit),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> pickImage() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (image == null) {
+      return;
+    }
+    setState(() => selectedImagePath = image.path);
+  }
+
+  void submit() {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    Navigator.pop(
+      context,
+      GroupDetailsUpdateData(
+        name: nameController.text,
+        imagePath: selectedImagePath,
+      ),
+    );
+  }
+}

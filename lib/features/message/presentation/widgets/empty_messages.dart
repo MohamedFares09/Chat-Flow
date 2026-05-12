@@ -9,14 +9,10 @@ class EmptyMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-      children:  [
+      children: [
         DateChip(),
         SizedBox(height: 120),
-        Icon(
-          Icons.chat_bubble_outline,
-          color: AppColors.body,
-          size: 42,
-        ),
+        Icon(Icons.chat_bubble_outline, color: AppColors.body, size: 42),
         SizedBox(height: 12),
         Text(
           'No messages yet.',
@@ -31,10 +27,7 @@ class EmptyMessages extends StatelessWidget {
         Text(
           'Send the first message to start the conversation.',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.body,
-            fontSize: 14,
-          ),
+          style: TextStyle(color: AppColors.body, fontSize: 14),
         ),
       ],
     );
