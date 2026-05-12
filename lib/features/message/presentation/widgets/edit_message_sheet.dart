@@ -54,6 +54,7 @@ class _EditMessageSheetState extends State<EditMessageSheet> {
                 minLines: 1,
                 maxLines: 5,
                 autofocus: true,
+                textAlignVertical: TextAlignVertical.top,
                 cursorColor: AppColors.accent,
                 style: TextStyle(color: AppColors.title),
                 decoration: InputDecoration(

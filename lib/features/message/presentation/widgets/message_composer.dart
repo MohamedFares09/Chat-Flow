@@ -55,9 +55,12 @@ class MessageComposer extends StatelessWidget {
                     child: TextField(
                       controller: controller,
                       minLines: 1,
-                      maxLines: 4,
+                      maxLines: 1,
+                      textAlignVertical: TextAlignVertical.center,
                       style: TextStyle(color: AppColors.title, fontSize: 16),
                       decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
                         border: InputBorder.none,
                         hintText: 'Type a message...',
                         hintStyle: TextStyle(
