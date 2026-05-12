@@ -75,6 +75,7 @@ void setupGetIt() {
       () => GroupsFirebaseService(
         firestore: getIt<FirebaseFirestore>(),
         firebaseAuth: getIt<FirebaseAuth>(),
+        firebaseStorage: getIt<FirebaseStorage>(),
       ),
     );
   }

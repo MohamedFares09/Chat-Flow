@@ -7,6 +7,7 @@ import 'package:test_codex/features/groups/data/services/groups_firebase_service
 import 'package:test_codex/features/groups/domain/entities/group_entity.dart';
 import 'package:test_codex/features/groups/domain/repos/groups_repo.dart';
 import 'package:test_codex/features/home/domain/entities/home_user_entity.dart';
+import 'package:test_codex/features/message/domain/entities/message_entity.dart';
 
 class GroupsRepoImpl extends GroupsRepo {
   GroupsRepoImpl({required this.groupsFirebaseService});
@@ -65,6 +66,62 @@ class GroupsRepoImpl extends GroupsRepo {
       return left(ServerFailure(e.message));
     } catch (e) {
       log('Exception GroupsRepoImpl - createGroup: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Stream<GroupEntity> watchGroup(String groupId) {
+    return groupsFirebaseService.watchGroup(groupId);
+  }
+
+  @override
+  Stream<List<MessageEntity>> getGroupMessages(String groupId) {
+    return groupsFirebaseService.getGroupMessages(groupId);
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendGroupMessage({
+    required String groupId,
+    required String text,
+  }) async {
+    try {
+      await groupsFirebaseService.sendGroupMessage(
+        groupId: groupId,
+        text: text,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception GroupsRepoImpl - sendGroupMessage: $e');
+      return left(
+        const ServerFailure('Something went wrong. Please try again.'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendGroupMediaMessage({
+    required String groupId,
+    required String filePath,
+    required String type,
+    String text = '',
+  }) async {
+    try {
+      await groupsFirebaseService.sendGroupMediaMessage(
+        groupId: groupId,
+        filePath: filePath,
+        type: type,
+        text: text,
+      );
+      return right(unit);
+    } on CustomException catch (e) {
+      return left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exception GroupsRepoImpl - sendGroupMediaMessage: $e');
       return left(
         const ServerFailure('Something went wrong. Please try again.'),
       );

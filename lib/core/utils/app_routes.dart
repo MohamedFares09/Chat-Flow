@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test_codex/features/auth/presentation/views/login_view.dart';
 import 'package:test_codex/features/auth/presentation/views/register_view.dart';
 import 'package:test_codex/features/auth/presentation/views/splash_view.dart';
+import 'package:test_codex/features/groups/domain/entities/group_entity.dart';
+import 'package:test_codex/features/groups/presentation/views/group_chat_view.dart';
 import 'package:test_codex/features/groups/presentation/views/groups_view.dart';
 import 'package:test_codex/features/groups/presentation/views/new_group_view.dart';
 import 'package:test_codex/features/home/domain/entities/conversation_entity.dart';
@@ -23,6 +25,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const GroupsView());
     case NewGroupView.route:
       return MaterialPageRoute(builder: (_) => const NewGroupView());
+    case GroupChatView.route:
+      final group = settings.arguments as GroupEntity;
+      return MaterialPageRoute(builder: (_) => GroupChatView(group: group));
     case MessageView.route:
       final conversation = settings.arguments as ConversationEntity;
       return MaterialPageRoute(

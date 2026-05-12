@@ -1,16 +1,25 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:test_codex/core/errors/custom_exception.dart';
 import 'package:test_codex/features/groups/data/models/group_model.dart';
 import 'package:test_codex/features/home/data/models/conversation_model.dart';
 import 'package:test_codex/features/home/data/models/home_user_model.dart';
 import 'package:test_codex/features/home/domain/entities/home_user_entity.dart';
+import 'package:test_codex/features/message/data/models/message_model.dart';
 
 class GroupsFirebaseService {
-  GroupsFirebaseService({required this.firestore, required this.firebaseAuth});
+  GroupsFirebaseService({
+    required this.firestore,
+    required this.firebaseAuth,
+    required this.firebaseStorage,
+  });
 
   final FirebaseFirestore firestore;
   final FirebaseAuth firebaseAuth;
+  final FirebaseStorage firebaseStorage;
 
   Stream<List<GroupModel>> watchGroups() {
     return firestore
@@ -130,11 +139,163 @@ class GroupsFirebaseService {
     return group;
   }
 
+  Stream<GroupModel> watchGroup(String groupId) {
+    return firestore.collection('groups').doc(groupId).snapshots().map((doc) {
+      final data = doc.data();
+      if (data == null) {
+        throw CustomException('Group was not found.');
+      }
+      _ensureCurrentUserIsMemberData(data);
+      return GroupModel.fromFirestore(id: doc.id, json: data);
+    });
+  }
+
+  Stream<List<MessageModel>> getGroupMessages(String groupId) {
+    return firestore
+        .collection('groups')
+        .doc(groupId)
+        .collection('messages')
+        .orderBy('createdAt')
+        .snapshots()
+        .asyncMap((snapshot) async {
+          await _ensureCurrentUserIsMember(groupId);
+          return snapshot.docs
+              .map(
+                (doc) => MessageModel.fromFirestore(
+                  id: doc.id,
+                  currentUserId: _currentUserId,
+                  json: doc.data(),
+                ),
+              )
+              .toList();
+        });
+  }
+
+  Future<void> sendGroupMessage({
+    required String groupId,
+    required String text,
+  }) async {
+    final currentUserId = _currentUserId;
+    final messageText = text.trim();
+    if (messageText.isEmpty) {
+      throw CustomException('Please write a message first.');
+    }
+    await _ensureCurrentUserIsMember(groupId);
+
+    final groupRef = firestore.collection('groups').doc(groupId);
+    final messageRef = groupRef.collection('messages').doc();
+
+    await firestore.runTransaction((transaction) async {
+      transaction.set(messageRef, {
+        'text': messageText,
+        'senderId': currentUserId,
+        'type': 'text',
+        'mediaUrl': null,
+        'status': 'sent',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      transaction.update(groupRef, {
+        'lastMessage': messageText,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    });
+  }
+
+  Future<void> sendGroupMediaMessage({
+    required String groupId,
+    required String filePath,
+    required String type,
+    required String text,
+  }) async {
+    final currentUserId = _currentUserId;
+    final messageType = type.trim().toLowerCase();
+    if (!['image', 'video', 'voice'].contains(messageType)) {
+      throw CustomException('Unsupported message type.');
+    }
+    await _ensureCurrentUserIsMember(groupId);
+
+    final file = File(filePath);
+    if (!await file.exists()) {
+      throw CustomException('Selected file was not found.');
+    }
+
+    final extension = _fileExtension(filePath, messageType);
+    final ref = firebaseStorage.ref(
+      'groups/$groupId/messages/$currentUserId/'
+      '${DateTime.now().millisecondsSinceEpoch}.$extension',
+    );
+    await ref.putFile(file);
+    final mediaUrl = await ref.getDownloadURL();
+
+    final groupRef = firestore.collection('groups').doc(groupId);
+    final messageRef = groupRef.collection('messages').doc();
+    final previewText = _previewText(messageType, text);
+
+    await firestore.runTransaction((transaction) async {
+      transaction.set(messageRef, {
+        'text': text.trim(),
+        'senderId': currentUserId,
+        'type': messageType,
+        'mediaUrl': mediaUrl,
+        'status': 'sent',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      transaction.update(groupRef, {
+        'lastMessage': previewText,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    });
+  }
+
+  Future<void> _ensureCurrentUserIsMember(String groupId) async {
+    final doc = await firestore.collection('groups').doc(groupId).get();
+    final data = doc.data();
+    if (data == null) {
+      throw CustomException('Group was not found.');
+    }
+    _ensureCurrentUserIsMemberData(data);
+  }
+
+  void _ensureCurrentUserIsMemberData(Map<String, dynamic> data) {
+    final memberIds = List<String>.from(data['memberIds'] ?? []);
+    if (!memberIds.contains(_currentUserId)) {
+      throw CustomException('You are not a member of this group.');
+    }
+  }
+
   String get _currentUserId {
     final user = firebaseAuth.currentUser;
     if (user == null) {
       throw CustomException('Please sign in again.');
     }
     return user.uid;
+  }
+
+  String _fileExtension(String filePath, String type) {
+    final fileName = filePath.split(Platform.pathSeparator).last;
+    if (fileName.contains('.')) {
+      return fileName.split('.').last;
+    }
+
+    return switch (type) {
+      'image' => 'jpg',
+      'video' => 'mp4',
+      'voice' => 'm4a',
+      _ => 'file',
+    };
+  }
+
+  String _previewText(String type, String text) {
+    final cleanText = text.trim();
+    if (cleanText.isNotEmpty) {
+      return cleanText;
+    }
+
+    return switch (type) {
+      'image' => 'Photo',
+      'video' => 'Video',
+      'voice' => 'Voice message',
+      _ => 'Attachment',
+    };
   }
 }

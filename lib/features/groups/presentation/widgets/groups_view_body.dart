@@ -6,6 +6,7 @@ import 'package:test_codex/core/widgets/app_background.dart';
 import 'package:test_codex/core/widgets/app_bottom_nav_bar.dart';
 import 'package:test_codex/features/groups/domain/entities/group_entity.dart';
 import 'package:test_codex/features/groups/presentation/cubits/groups/groups_cubit.dart';
+import 'package:test_codex/features/groups/presentation/views/group_chat_view.dart';
 import 'package:test_codex/features/groups/presentation/views/new_group_view.dart';
 import 'package:test_codex/features/groups/presentation/widgets/groups_contacts_list.dart';
 import 'package:test_codex/features/groups/presentation/widgets/groups_header.dart';
@@ -69,7 +70,10 @@ class _GroupsViewBodyState extends State<GroupsViewBody> {
                         ),
                         if (widget.groups.isNotEmpty) ...[
                           const SizedBox(height: 24),
-                          GroupsSummaryList(groups: widget.groups),
+                          GroupsSummaryList(
+                            groups: widget.groups,
+                            onGroupTap: _openGroupChat,
+                          ),
                         ],
                         const SizedBox(height: 24),
                         GroupsContactsList(contacts: widget.contacts),
@@ -118,5 +122,9 @@ class _GroupsViewBodyState extends State<GroupsViewBody> {
 
   void _openNewGroup() {
     Navigator.pushNamed(context, NewGroupView.route);
+  }
+
+  void _openGroupChat(GroupEntity group) {
+    Navigator.pushNamed(context, GroupChatView.route, arguments: group);
   }
 }
